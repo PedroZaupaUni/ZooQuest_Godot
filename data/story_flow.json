@@ -1,0 +1,100 @@
+[
+  {
+    "id": "intro",
+    "kind": "narrative",
+    "title": "Uma excursao diferente",
+    "speaker": "Narrador",
+    "pages": [
+      "Uma turma chega ao zoologico para aprender sobre os animais e o cuidado com a natureza.",
+      "O guia pede que todos permaneçam com o grupo e respeitem as regras de seguranca.",
+      "Mas o personagem se afasta por curiosidade. Uma luz magica aparece e a jornada comeca!"
+    ]
+  },
+  {
+    "id": "transform_frog",
+    "kind": "transformation",
+    "from": "human",
+    "to": "frog",
+    "title": "Transformacao: Sapo Matematico",
+    "text": "Resolva desafios de matematica e escolha a vitoria-regia correta para prosseguir."
+  },
+  {
+    "id": "frog_game",
+    "kind": "minigame",
+    "phase": "frog"
+  },
+  {
+    "id": "return_human_1",
+    "kind": "transformation",
+    "from": "frog",
+    "to": "human",
+    "title": "Primeiro desafio concluido!",
+    "text": "O personagem volta a forma humana e entende que pensar com calma ajuda a tomar boas decisoes."
+  },
+  {
+    "id": "between_frog_bird",
+    "kind": "narrative",
+    "title": "A jornada continua",
+    "speaker": "Guia magico",
+    "pages": [
+      "Uma nova passagem surge no caminho. Para seguir, sera preciso observar padroes e escolher a rota correta.",
+      "O vento aumenta, penas coloridas aparecem e uma nova transformacao se aproxima."
+    ]
+  },
+  {
+    "id": "transform_bird",
+    "kind": "transformation",
+    "from": "human",
+    "to": "bird",
+    "title": "Transformacao: Passaro Logico",
+    "text": "Mude de faixa, analise as alternativas e atravesse a passagem correta."
+  },
+  {
+    "id": "bird_game",
+    "kind": "minigame",
+    "phase": "bird"
+  },
+  {
+    "id": "return_human_2",
+    "kind": "transformation",
+    "from": "bird",
+    "to": "human",
+    "title": "Segundo desafio concluido!",
+    "text": "De volta a forma humana, o personagem percebe que observar padroes evita escolhas apressadas."
+  },
+  {
+    "id": "between_bird_worm",
+    "kind": "narrative",
+    "title": "A ultima licao",
+    "speaker": "Narrador",
+    "pages": [
+      "Perto do jardim, frutas coloridas aparecem pelo caminho. Cada escolha tera uma consequencia.",
+      "Para concluir a jornada, sera preciso unir interpretacao, responsabilidade e raciocinio."
+    ]
+  },
+  {
+    "id": "transform_worm",
+    "kind": "transformation",
+    "from": "human",
+    "to": "worm",
+    "title": "Transformacao: Minhoca das Escolhas",
+    "text": "Movimente-se pelo jardim e colete apenas a fruta que representa a resposta correta."
+  },
+  {
+    "id": "worm_game",
+    "kind": "minigame",
+    "phase": "worm"
+  },
+  {
+    "id": "return_human_3",
+    "kind": "transformation",
+    "from": "worm",
+    "to": "human",
+    "title": "A forma humana foi recuperada!",
+    "text": "Os tres desafios foram superados. O personagem aprendeu sobre conhecimento, regras e consequencias."
+  },
+  {
+    "id": "ending",
+    "kind": "ending"
+  }
+]

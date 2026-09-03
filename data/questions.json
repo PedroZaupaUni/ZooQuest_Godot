@@ -1,0 +1,125 @@
+{
+  "frog": [
+    {
+      "id": "FROG_MATH_001",
+      "category": "matematica",
+      "difficulty": 1,
+      "question": "Quanto e 4 + 3?",
+      "options": [
+        "6",
+        "7",
+        "8"
+      ],
+      "correct_index": 1,
+      "explanation": "4 + 3 e igual a 7."
+    },
+    {
+      "id": "FROG_MATH_002",
+      "category": "matematica",
+      "difficulty": 1,
+      "question": "Quanto e 9 - 5?",
+      "options": [
+        "4",
+        "5",
+        "3"
+      ],
+      "correct_index": 0,
+      "explanation": "Ao retirar 5 de 9, restam 4."
+    },
+    {
+      "id": "FROG_MATH_003",
+      "category": "matematica",
+      "difficulty": 2,
+      "question": "Quanto e 3 x 2?",
+      "options": [
+        "7",
+        "5",
+        "6"
+      ],
+      "correct_index": 2,
+      "explanation": "3 grupos de 2 formam 6."
+    }
+  ],
+  "bird": [
+    {
+      "id": "BIRD_LOGIC_001",
+      "category": "raciocinio_logico",
+      "difficulty": 1,
+      "question": "Complete a sequencia: 2, 4, 6, ...",
+      "options": [
+        "7",
+        "8",
+        "9"
+      ],
+      "correct_index": 1,
+      "explanation": "A sequencia aumenta de 2 em 2; o proximo numero e 8."
+    },
+    {
+      "id": "BIRD_LOGIC_002",
+      "category": "raciocinio_logico",
+      "difficulty": 1,
+      "question": "Qual forma nao possui lados?",
+      "options": [
+        "Triangulo",
+        "Circulo",
+        "Quadrado"
+      ],
+      "correct_index": 1,
+      "explanation": "O circulo nao possui lados retos."
+    },
+    {
+      "id": "BIRD_LOGIC_003",
+      "category": "raciocinio_logico",
+      "difficulty": 2,
+      "question": "Complete a sequencia: 10, 8, 6, ...",
+      "options": [
+        "5",
+        "4",
+        "3"
+      ],
+      "correct_index": 1,
+      "explanation": "A sequencia diminui de 2 em 2; o proximo numero e 4."
+    }
+  ],
+  "worm": [
+    {
+      "id": "WORM_ETHICS_001",
+      "category": "comportamento",
+      "difficulty": 1,
+      "question": "O que fazer com um lixo encontrado no zoologico?",
+      "options": [
+        "Ignorar",
+        "Colocar no lixo",
+        "Jogar no lago"
+      ],
+      "correct_index": 1,
+      "explanation": "Colocar o lixo na lixeira ajuda a cuidar do ambiente e dos animais."
+    },
+    {
+      "id": "WORM_ETHICS_002",
+      "category": "comportamento",
+      "difficulty": 1,
+      "question": "Ao receber uma orientacao do guia, o correto e...",
+      "options": [
+        "Seguir a orientacao",
+        "Correr sozinho",
+        "Entrar no recinto"
+      ],
+      "correct_index": 0,
+      "explanation": "Seguir a orientacao protege voce, o grupo e os animais."
+    },
+    {
+      "id": "WORM_MATH_003",
+      "category": "interpretacao",
+      "difficulty": 2,
+      "question": "Ha 2 cestos com 3 frutas em cada. Quantas frutas ha?",
+      "options": [
+        "5",
+        "6",
+        "7"
+      ],
+      "correct_index": 1,
+      "explanation": "2 grupos de 3 frutas totalizam 6."
+    }
+  ]
+}

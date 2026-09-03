@@ -1,0 +1,2 @@
+GODOT_SMOKE=BLOCKED_ENGINE_NOT_FOUND
+A validacao runtime nao foi executada neste ambiente porque o binario Godot nao estava instalado. Use scripts/run_godot_smoke.sh no computador com Godot 4.x.

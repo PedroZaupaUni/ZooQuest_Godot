@@ -1,0 +1,35 @@
+{
+  "project": "ZooQuest: A Jornada do Aprendizado",
+  "state": "VERSAO_FUNCIONAL_LOCAL",
+  "file_count_excluding_manifest_inventory": 84,
+  "total_bytes_excluding_manifest_inventory": 3814149,
+  "counts_by_extension": {
+    ".asta": 1,
+    ".docx": 2,
+    ".gd": 22,
+    ".godot": 1,
+    ".json": 3,
+    ".md": 14,
+    ".pdf": 5,
+    ".png": 9,
+    ".py": 1,
+    ".sh": 2,
+    ".svg": 1,
+    ".tscn": 9,
+    ".txt": 6,
+    ".wav": 5,
+    "[no_extension]": 3
+  },
+  "godot_scenes": 9,
+  "gdscript_files": 22,
+  "questions": 9,
+  "flow_steps": 13,
+  "minigames": [
+    "frog",
+    "bird",
+    "worm"
+  ],
+  "static_validation": "PASS",
+  "runtime_validation": "BLOCKED_ENGINE_NOT_FOUND_IN_GENERATION_ENVIRONMENT",
+  "report_pdf_pages": 13
+}

@@ -1,0 +1,37 @@
+; ZooQuest: A Jornada do Aprendizado
+; Projeto Godot 4.x - jogo educativo 2D, local e autossuficiente.
+
+config_version=5
+
+[application]
+
+config/name="ZooQuest: A Jornada do Aprendizado"
+config/description="Jogo educativo 2D com tres mini-games: sapo, passaro e minhoca."
+run/main_scene="res://core/main.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+GameState="*res://core/game_state.gd"
+QuestionBank="*res://data/question_bank.gd"
+FlowRepository="*res://data/flow_repository.gd"
+AudioManager="*res://core/audio_manager.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+
+[audio]
+
+driver/enable_input=false

@@ -1,0 +1,467 @@
+{
+  "project": "ZooQuest: A Jornada do Aprendizado",
+  "validation_type": "static_repository_validation",
+  "status": "PASS",
+  "checks_total": 91,
+  "checks_passed": 91,
+  "errors": [],
+  "warnings": [],
+  "checks": [
+    {
+      "name": "required:project.godot",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:core/main.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:core/main.gd",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:core/game_state.gd",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:data/questions.json",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:data/story_flow.json",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:data/question_bank.gd",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:ui/main_menu.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:ui/narrative_screen.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:ui/transformation_screen.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:ui/ending_screen.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:ui/hud.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:minigames/frog/frog_minigame.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:minigames/bird/bird_minigame.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:minigames/worm/worm_minigame.tscn",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:README.md",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "required:CONTINUE_AQUI.md",
+      "passed": true,
+      "detail": "arquivo obrigatorio presente"
+    },
+    {
+      "name": "main_scene",
+      "passed": true,
+      "detail": "cena principal configurada"
+    },
+    {
+      "name": "autoload:GameState",
+      "passed": true,
+      "detail": "autoload configurado"
+    },
+    {
+      "name": "autoload:QuestionBank",
+      "passed": true,
+      "detail": "autoload configurado"
+    },
+    {
+      "name": "autoload:FlowRepository",
+      "passed": true,
+      "detail": "autoload configurado"
+    },
+    {
+      "name": "autoload:AudioManager",
+      "passed": true,
+      "detail": "autoload configurado"
+    },
+    {
+      "name": "resource_references",
+      "passed": true,
+      "detail": "referencias res:// resolvidas"
+    },
+    {
+      "name": "question_phases",
+      "passed": true,
+      "detail": "tres fases cadastradas"
+    },
+    {
+      "name": "questions_count:frog",
+      "passed": true,
+      "detail": "exatamente tres perguntas"
+    },
+    {
+      "name": "question_shape:FROG_MATH_001",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "question_shape:FROG_MATH_002",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "question_shape:FROG_MATH_003",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "questions_count:bird",
+      "passed": true,
+      "detail": "exatamente tres perguntas"
+    },
+    {
+      "name": "question_shape:BIRD_LOGIC_001",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "question_shape:BIRD_LOGIC_002",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "question_shape:BIRD_LOGIC_003",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "questions_count:worm",
+      "passed": true,
+      "detail": "exatamente tres perguntas"
+    },
+    {
+      "name": "question_shape:WORM_ETHICS_001",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "question_shape:WORM_ETHICS_002",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "question_shape:WORM_MATH_003",
+      "passed": true,
+      "detail": "contrato completo"
+    },
+    {
+      "name": "question_id_uniqueness",
+      "passed": true,
+      "detail": "IDs unicos"
+    },
+    {
+      "name": "flow_order",
+      "passed": true,
+      "detail": "fluxo completo e ordenado"
+    },
+    {
+      "name": "flow_minigames",
+      "passed": true,
+      "detail": "tres mini-games na ordem canonica"
+    },
+    {
+      "name": "return_human_after_each_phase",
+      "passed": true,
+      "detail": "retorno humano apos cada fase"
+    },
+    {
+      "name": "gdscript_balance:tests/smoke_test.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:data/question_bank.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:data/flow_repository.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:core/audio_manager.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:core/game_state.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:core/main.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:ui/character_portrait.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:ui/transformation_screen.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:ui/ending_screen.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:ui/hud.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:ui/main_menu.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:ui/narrative_screen.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:shared/ui_helpers.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:characters/worm/worm_player.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:characters/bird/bird_player.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:characters/frog/frog_player.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:minigames/worm/worm_minigame.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:minigames/worm/fruit_answer.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:minigames/bird/answer_gate.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:minigames/bird/bird_minigame.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:minigames/frog/frog_minigame.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:minigames/frog/lily_pad.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "tscn_header:core/main.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:core/main.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:ui/main_menu.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:ui/main_menu.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:ui/ending_screen.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:ui/ending_screen.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:ui/hud.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:ui/hud.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:ui/transformation_screen.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:ui/transformation_screen.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:ui/narrative_screen.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:ui/narrative_screen.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:minigames/worm/worm_minigame.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:minigames/worm/worm_minigame.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:minigames/bird/bird_minigame.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:minigames/bird/bird_minigame.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:minigames/frog/frog_minigame.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:minigames/frog/frog_minigame.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "wav:click.wav",
+      "passed": true,
+      "detail": "WAV PCM mono valido"
+    },
+    {
+      "name": "wav:correct.wav",
+      "passed": true,
+      "detail": "WAV PCM mono valido"
+    },
+    {
+      "name": "wav:wrong.wav",
+      "passed": true,
+      "detail": "WAV PCM mono valido"
+    },
+    {
+      "name": "wav:transform.wav",
+      "passed": true,
+      "detail": "WAV PCM mono valido"
+    },
+    {
+      "name": "wav:finish.wav",
+      "passed": true,
+      "detail": "WAV PCM mono valido"
+    },
+    {
+      "name": "source:Orientacoes_UniFil_Jogos.pdf",
+      "passed": true,
+      "detail": "fonte preservada"
+    },
+    {
+      "name": "source:Visao_ZooQuest.pdf",
+      "passed": true,
+      "detail": "fonte preservada"
+    },
+    {
+      "name": "source:GDD_ZooQuest.pdf",
+      "passed": true,
+      "detail": "fonte preservada"
+    },
+    {
+      "name": "source:Projeto_PI_FindIt_Historico.pdf",
+      "passed": true,
+      "detail": "fonte preservada"
+    },
+    {
+      "name": "source:Documentacao_Gameplay_e_Fluxos.docx",
+      "passed": true,
+      "detail": "fonte preservada"
+    },
+    {
+      "name": "source:Casos_de_Uso_ZooQuest.asta",
+      "passed": true,
+      "detail": "fonte preservada"
+    }
+  ],
+  "runtime_note": "A execucao dentro do motor Godot deve ser confirmada com tests/manual/ROTEIRO_TESTE_FUNCIONAL.md."
+}

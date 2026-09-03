@@ -1,0 +1,20 @@
+# Godot
+.godot/
+.import/
+export.cfg
+export_presets.cfg
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*~
+
+# Generated local logs
+validation/local_*.json
+validation/local_*.txt
+
+# Exported builds (not part of this development delivery)
+build/
+exports/

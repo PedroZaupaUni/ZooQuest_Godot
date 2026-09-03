@@ -1,0 +1,20 @@
+ZOOQUEST - EXECUCAO IMEDIATA
+============================
+
+1. Extraia o ZIP inteiro.
+2. Abra o Godot 4.x.
+3. Clique em Importar e selecione project.godot na raiz.
+4. Aguarde a importacao dos recursos.
+5. Pressione F5 para iniciar pelo menu.
+6. Execute tests/manual/ROTEIRO_TESTE_FUNCIONAL.md.
+
+Validacao estatica:
+  python3 scripts/validate_repository.py
+
+Smoke test com Godot instalado:
+  ./scripts/run_godot_smoke.sh
+
+Leitura recomendada:
+  CONTINUE_AQUI.md
+  README.md
+  docs/GUIA_DE_ESTUDO.md
