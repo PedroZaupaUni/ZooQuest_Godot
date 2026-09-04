@@ -18,3 +18,8 @@ validation/local_*.txt
 # Exported builds (not part of this development delivery)
 build/
 exports/
+validation/FIX1_*/
+validation/GOVERNANCE_*/
+*.log
+*.tmp
+*.swp

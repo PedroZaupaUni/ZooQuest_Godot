@@ -2,8 +2,8 @@
   "project": "ZooQuest: A Jornada do Aprendizado",
   "validation_type": "static_repository_validation",
   "status": "PASS",
-  "checks_total": 91,
-  "checks_passed": 91,
+  "checks_total": 92,
+  "checks_passed": 92,
   "errors": [],
   "warnings": [],
   "checks": [
@@ -209,6 +209,11 @@
     },
     {
       "name": "gdscript_balance:tests/smoke_test.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:tests/flow_transition_test.gd",
       "passed": true,
       "detail": "delimitadores balanceados"
     },

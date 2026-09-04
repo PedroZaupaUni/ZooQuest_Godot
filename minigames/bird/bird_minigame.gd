@@ -113,7 +113,11 @@ func _submit_answer(index: int) -> void:
         AudioManager.play_sfx("correct")
         hud.show_feedback("Passagem correta! " + str(question["explanation"]), true)
         await bird.play_celebration()
+        if not is_inside_tree():
+            return
         await get_tree().create_timer(1.05).timeout
+        if not is_inside_tree():
+            return
         question_index += 1
         _present_question()
     else:
@@ -121,7 +125,11 @@ func _submit_answer(index: int) -> void:
         AudioManager.play_sfx("wrong")
         hud.show_feedback("Colisao! " + str(question["explanation"]), false)
         await bird.play_collision()
+        if not is_inside_tree():
+            return
         await get_tree().create_timer(1.25).timeout
+        if not is_inside_tree():
+            return
         _present_question()
 
 func _on_menu_requested() -> void:

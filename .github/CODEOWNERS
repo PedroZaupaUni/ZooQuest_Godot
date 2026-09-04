@@ -1,0 +1,10 @@
+# ZooQuest CODEOWNERS
+# Lead tecnico / integracao. Adicione os demais GitHub handles por area quando definidos.
+* @PedroZaupaUni
+
+# Areas de governanca e nucleo ficam explicitamente sob revisao do lead.
+/.github/ @PedroZaupaUni
+/core/ @PedroZaupaUni
+/data/ @PedroZaupaUni
+/scripts/ @PedroZaupaUni
+/tests/ @PedroZaupaUni

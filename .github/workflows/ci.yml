@@ -1,0 +1,109 @@
+name: ZooQuest CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 8 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zooquest-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: "4.7.2"
+  GODOT_ARCHIVE: "Godot_v4.7.2-stable_linux.x86_64.zip"
+  GODOT_BINARY: "Godot_v4.7.2-stable_linux.x86_64"
+
+jobs:
+  repository-audit:
+    name: repository-audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Repository contract
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/validate_repository.py
+          python3 scripts/validate_runtime_patterns.py
+          python3 scripts/audit_repository.py
+
+      - name: Git whitespace audit
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git fetch --no-tags origin "${{ github.base_ref }}"
+          git diff --check "origin/${{ github.base_ref }}...HEAD"
+
+  godot-tests:
+    name: godot-tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install Godot 4.7.2
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          mkdir -p "$RUNNER_TEMP/godot"
+          curl --fail --location --retry 4 --retry-delay 3 \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/${GODOT_ARCHIVE}" \
+            --output "$RUNNER_TEMP/godot/${GODOT_ARCHIVE}"
+          unzip -q "$RUNNER_TEMP/godot/${GODOT_ARCHIVE}" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/${GODOT_BINARY}"
+          echo "GODOT=$RUNNER_TEMP/godot/${GODOT_BINARY}" >> "$GITHUB_ENV"
+          "$RUNNER_TEMP/godot/${GODOT_BINARY}" --version
+
+      - name: Import project resources
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          "$GODOT" --headless --path . --import --quit --log-file godot-import.log
+
+      - name: Godot smoke test
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          "$GODOT" --headless --path . --script res://tests/smoke_test.gd --log-file godot-smoke.log | tee godot-smoke.stdout
+          grep -q 'ZOOQUEST_GODOT_SMOKE=PASS' godot-smoke.stdout godot-smoke.log
+
+      - name: Full flow transition regression
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          "$GODOT" --headless --path . --script res://tests/flow_transition_test.gd --log-file godot-flow.log | tee godot-flow.stdout
+          grep -q 'ZOOQUEST_FLOW_TRANSITION_TEST=PASS' godot-flow.stdout godot-flow.log
+
+      - name: Main scene startup audit
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          set +e
+          timeout 8s "$GODOT" --headless --path . --log-file godot-main.log > godot-main.stdout 2>&1
+          rc=$?
+          set -e
+          if [[ "$rc" -ne 0 && "$rc" -ne 124 ]]; then
+            cat godot-main.stdout
+            exit "$rc"
+          fi
+          pattern='SCRIPT ERROR|Parse Error|Parser Error|Invalid call|Cannot call method|Invalid get index|Invalid access|ERROR:'
+          if grep -Eqi "$pattern" godot-main.stdout godot-main.log 2>/dev/null; then
+            grep -Ein "$pattern" godot-main.stdout godot-main.log || true
+            exit 1
+          fi
+          echo 'ZOOQUEST_MAIN_STARTUP=PASS'

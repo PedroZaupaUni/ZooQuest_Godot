@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+    if [[ "$remote_ref" == "refs/heads/main" ]]; then
+        cat >&2 <<'MSG'
+ERRO: push direto para main bloqueado pelo hook local do ZooQuest.
+Crie uma branch e abra Pull Request.
+Exemplo:
+  git switch -c feature/minha-tarefa
+  git push -u origin HEAD
+  gh pr create
+MSG
+        exit 1
+    fi
+done

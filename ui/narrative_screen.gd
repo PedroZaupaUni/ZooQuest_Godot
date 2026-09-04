@@ -90,8 +90,13 @@ func _build_interface() -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if event.is_action_pressed("ui_accept"):
+        # A tela pode ser removida do SceneTree quando o sinal de navegacao for emitido.
+        # Marque o evento como tratado antes da troca para evitar viewport nulo e
+        # impedir que a mesma tecla atravesse para a proxima etapa.
+        var viewport := get_viewport()
+        if viewport != null:
+            viewport.set_input_as_handled()
         _on_next_pressed()
-        get_viewport().set_input_as_handled()
 
 func _refresh_page() -> void:
     if pages.is_empty():

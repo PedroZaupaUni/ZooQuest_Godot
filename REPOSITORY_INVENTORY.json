@@ -1,18 +1,18 @@
 {
   "project": "ZooQuest: A Jornada do Aprendizado",
-  "state": "VERSAO_FUNCIONAL_LOCAL",
-  "file_count_excluding_manifest_inventory": 84,
-  "total_bytes_excluding_manifest_inventory": 3814149,
+  "state": "FIX1_RUNTIME_HARDENING_AGUARDANDO_RETESTE_COMPLETO",
+  "file_count_excluding_manifest_inventory": 88,
+  "total_bytes_excluding_manifest_inventory": 3824880,
   "counts_by_extension": {
     ".asta": 1,
     ".docx": 2,
-    ".gd": 22,
+    ".gd": 23,
     ".godot": 1,
     ".json": 3,
-    ".md": 14,
+    ".md": 16,
     ".pdf": 5,
     ".png": 9,
-    ".py": 1,
+    ".py": 2,
     ".sh": 2,
     ".svg": 1,
     ".tscn": 9,
@@ -21,7 +21,7 @@
     "[no_extension]": 3
   },
   "godot_scenes": 9,
-  "gdscript_files": 22,
+  "gdscript_files": 23,
   "questions": 9,
   "flow_steps": 13,
   "minigames": [
@@ -30,6 +30,8 @@
     "worm"
   ],
   "static_validation": "PASS",
-  "runtime_validation": "BLOCKED_ENGINE_NOT_FOUND_IN_GENERATION_ENVIRONMENT",
+  "runtime_pattern_validation": "PASS",
+  "runtime_validation": "PARTIAL_USER_EVIDENCE_PRE_FIX1; FULL_RETEST_PENDING",
+  "known_crash_root_cause": "fixed: input handled after synchronous stage replacement",
   "report_pdf_pages": 13
 }
