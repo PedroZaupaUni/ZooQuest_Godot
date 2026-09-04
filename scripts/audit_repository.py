@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import os
 import re
 import subprocess
 import sys
@@ -34,7 +33,9 @@ rel = [p.relative_to(ROOT).as_posix() for p in files]
 for path in rel:
     check(not path.startswith(".godot/"), f"arquivo gerado rastreado: {path}")
     check(not re.match(r"^validation/FIX1_[^/]+/", path), f"log local FIX1 rastreado: {path}")
+    check(not re.match(r"^validation/GOVERNANCE_[^/]+/", path), f"log local governance rastreado: {path}")
     check(not path.endswith((".log", ".tmp", ".swp")), f"temporario/log rastreado: {path}")
+    check(not path.endswith(".patch"), f"patch operacional nao deve ser rastreado: {path}")
 
 # Evita arquivos grandes acidentais no projeto academico.
 MAX_BYTES = 25 * 1024 * 1024
@@ -49,11 +50,16 @@ required = [
     "data/story_flow.json",
     "scripts/validate_repository.py",
     "scripts/validate_runtime_patterns.py",
+    "scripts/audit_repository.py",
+    "scripts/check_godot_logs.sh",
     "tests/smoke_test.gd",
+    "tests/smoke_test.tscn",
     "tests/flow_transition_test.gd",
+    "tests/flow_transition_test.tscn",
     ".github/workflows/ci.yml",
     ".github/pull_request_template.md",
     ".github/CODEOWNERS",
+    ".github/rulesets/main-protection.json",
 ]
 for item in required:
     check((ROOT / item).is_file(), f"arquivo obrigatorio ausente: {item}")
@@ -63,18 +69,21 @@ for item in ("data/questions.json", "data/story_flow.json"):
     try:
         json.loads((ROOT / item).read_text(encoding="utf-8"))
         check(True, f"JSON valido: {item}")
-    except Exception as exc:  # pragma: no cover - erro vira saida do auditor
+    except Exception as exc:  # pragma: no cover
         check(False, f"JSON invalido {item}: {exc}")
 
-# Main scene declarada no projeto.
 project_text = (ROOT / "project.godot").read_text(encoding="utf-8", errors="replace")
-check("run/main_scene" in project_text, "project.godot sem run/main_scene")
+check('run/main_scene="res://core/main.tscn"' in project_text, "project.godot sem main scene canonica")
+for autoload in ("GameState", "QuestionBank", "FlowRepository", "AudioManager"):
+    check(f'{autoload}="*res://' in project_text, f"autoload ausente: {autoload}")
 
-# Workflow seguro: sem pull_request_target e token somente leitura.
 workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
 check("pull_request_target" not in workflow, "workflow usa pull_request_target")
 check(re.search(r"(?m)^permissions:\s*$", workflow) is not None, "workflow sem bloco permissions")
 check(re.search(r"(?m)^\s{2}contents:\s*read\s*$", workflow) is not None, "GITHUB_TOKEN nao esta contents: read")
+check("smoke_test.tscn" in workflow, "CI nao executa smoke em cena de runtime")
+check("flow_transition_test.tscn" in workflow, "CI nao executa flow em cena de runtime")
+check("check_godot_logs.sh" in workflow, "CI nao audita logs Godot")
 
 # Actions externas devem estar fixadas em SHA completo.
 for m in re.finditer(r"(?m)^\s*-?\s*uses:\s*([^@\s]+)@([^\s#]+)", workflow):

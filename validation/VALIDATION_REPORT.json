@@ -2,8 +2,8 @@
   "project": "ZooQuest: A Jornada do Aprendizado",
   "validation_type": "static_repository_validation",
   "status": "PASS",
-  "checks_total": 92,
-  "checks_passed": 92,
+  "checks_total": 96,
+  "checks_passed": 96,
   "errors": [],
   "warnings": [],
   "checks": [
@@ -321,6 +321,26 @@
       "name": "gdscript_balance:minigames/frog/lily_pad.gd",
       "passed": true,
       "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "tscn_header:tests/smoke_test.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:tests/smoke_test.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:tests/flow_transition_test.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:tests/flow_transition_test.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
     },
     {
       "name": "tscn_header:core/main.tscn",

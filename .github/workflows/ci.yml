@@ -28,9 +28,10 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Repository contract
         shell: bash
@@ -54,7 +55,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
 
       - name: Install Godot 4.7.2
         shell: bash
@@ -73,37 +76,37 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
-          "$GODOT" --headless --path . --import --quit --log-file godot-import.log
+          "$GODOT" --headless --path . --import --quit --log-file godot-import.log >godot-import.stdout 2>&1
+          cat godot-import.stdout
+          ./scripts/check_godot_logs.sh godot-import.log godot-import.stdout
 
-      - name: Godot smoke test
+      - name: Godot smoke test in project runtime
         shell: bash
         run: |
           set -Eeuo pipefail
-          "$GODOT" --headless --path . --script res://tests/smoke_test.gd --log-file godot-smoke.log | tee godot-smoke.stdout
+          timeout 90s "$GODOT" --headless --path . res://tests/smoke_test.tscn --log-file godot-smoke.log 2>&1 | tee godot-smoke.stdout
           grep -q 'ZOOQUEST_GODOT_SMOKE=PASS' godot-smoke.stdout godot-smoke.log
+          ./scripts/check_godot_logs.sh godot-smoke.log godot-smoke.stdout
 
-      - name: Full flow transition regression
+      - name: Full flow transition regression in project runtime
         shell: bash
         run: |
           set -Eeuo pipefail
-          "$GODOT" --headless --path . --script res://tests/flow_transition_test.gd --log-file godot-flow.log | tee godot-flow.stdout
+          timeout 90s "$GODOT" --headless --path . res://tests/flow_transition_test.tscn --log-file godot-flow.log 2>&1 | tee godot-flow.stdout
           grep -q 'ZOOQUEST_FLOW_TRANSITION_TEST=PASS' godot-flow.stdout godot-flow.log
+          ./scripts/check_godot_logs.sh godot-flow.log godot-flow.stdout
 
       - name: Main scene startup audit
         shell: bash
         run: |
           set -Eeuo pipefail
           set +e
-          timeout 8s "$GODOT" --headless --path . --log-file godot-main.log > godot-main.stdout 2>&1
+          timeout 8s "$GODOT" --headless --path . --log-file godot-main.log >godot-main.stdout 2>&1
           rc=$?
           set -e
+          cat godot-main.stdout
           if [[ "$rc" -ne 0 && "$rc" -ne 124 ]]; then
-            cat godot-main.stdout
             exit "$rc"
           fi
-          pattern='SCRIPT ERROR|Parse Error|Parser Error|Invalid call|Cannot call method|Invalid get index|Invalid access|ERROR:'
-          if grep -Eqi "$pattern" godot-main.stdout godot-main.log 2>/dev/null; then
-            grep -Ein "$pattern" godot-main.stdout godot-main.log || true
-            exit 1
-          fi
+          ./scripts/check_godot_logs.sh godot-main.log godot-main.stdout
           echo 'ZOOQUEST_MAIN_STARTUP=PASS'
