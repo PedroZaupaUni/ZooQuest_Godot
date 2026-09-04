@@ -24,7 +24,7 @@ func _ready() -> void:
 func _show_menu() -> void:
     GameState.set_phase("menu")
     var stage = MainMenuScene.instantiate()
-    stage.start_requested.connect(_start_game)
+    stage.start_requested.connect(_start_game, CONNECT_DEFERRED)
     _mount_stage(stage)
 
 func _start_game() -> void:
@@ -62,8 +62,8 @@ func _show_narrative(step: Dictionary) -> void:
         step.get("pages", []),
         str(step.get("speaker", "Narrador"))
     )
-    stage.finished.connect(_advance_flow)
-    stage.menu_requested.connect(_return_to_menu)
+    stage.finished.connect(_advance_flow, CONNECT_DEFERRED)
+    stage.menu_requested.connect(_return_to_menu, CONNECT_DEFERRED)
     _mount_stage(stage)
 
 func _show_transformation(step: Dictionary) -> void:
@@ -75,8 +75,8 @@ func _show_transformation(step: Dictionary) -> void:
         str(step.get("title", "Transformacao")),
         str(step.get("text", ""))
     )
-    stage.finished.connect(_advance_flow)
-    stage.menu_requested.connect(_return_to_menu)
+    stage.finished.connect(_advance_flow, CONNECT_DEFERRED)
+    stage.menu_requested.connect(_return_to_menu, CONNECT_DEFERRED)
     _mount_stage(stage)
 
 func _show_minigame(phase_id: String) -> void:
@@ -93,15 +93,15 @@ func _show_minigame(phase_id: String) -> void:
             push_error("Mini-game desconhecido: " + phase_id)
             _advance_flow()
             return
-    stage.completed.connect(_advance_flow)
-    stage.menu_requested.connect(_return_to_menu)
+    stage.completed.connect(_advance_flow, CONNECT_DEFERRED)
+    stage.menu_requested.connect(_return_to_menu, CONNECT_DEFERRED)
     _mount_stage(stage)
 
 func _show_ending() -> void:
     GameState.set_phase("ending")
     var stage = EndingScene.instantiate()
-    stage.replay_requested.connect(_start_game)
-    stage.menu_requested.connect(_return_to_menu)
+    stage.replay_requested.connect(_start_game, CONNECT_DEFERRED)
+    stage.menu_requested.connect(_return_to_menu, CONNECT_DEFERRED)
     _mount_stage(stage)
 
 func _return_to_menu() -> void:

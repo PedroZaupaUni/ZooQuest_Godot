@@ -2,8 +2,8 @@
   "project": "ZooQuest: A Jornada do Aprendizado",
   "validation_type": "static_repository_validation",
   "status": "PASS",
-  "checks_total": 91,
-  "checks_passed": 91,
+  "checks_total": 99,
+  "checks_passed": 99,
   "errors": [],
   "warnings": [],
   "checks": [
@@ -208,7 +208,17 @@
       "detail": "retorno humano apos cada fase"
     },
     {
+      "name": "gdscript_balance:tests/main_startup_test.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
       "name": "gdscript_balance:tests/smoke_test.gd",
+      "passed": true,
+      "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "gdscript_balance:tests/flow_transition_test.gd",
       "passed": true,
       "detail": "delimitadores balanceados"
     },
@@ -316,6 +326,36 @@
       "name": "gdscript_balance:minigames/frog/lily_pad.gd",
       "passed": true,
       "detail": "delimitadores balanceados"
+    },
+    {
+      "name": "tscn_header:tests/main_startup_test.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:tests/main_startup_test.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:tests/smoke_test.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:tests/smoke_test.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
+    },
+    {
+      "name": "tscn_header:tests/flow_transition_test.tscn",
+      "passed": true,
+      "detail": "cabecalho de cena presente"
+    },
+    {
+      "name": "tscn_root:tests/flow_transition_test.tscn",
+      "passed": true,
+      "detail": "no raiz presente"
     },
     {
       "name": "tscn_header:core/main.tscn",

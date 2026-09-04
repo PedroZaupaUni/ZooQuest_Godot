@@ -1,0 +1,168 @@
+name: ZooQuest CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 8 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zooquest-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: "4.7.2"
+  GODOT_ARCHIVE: "Godot_v4.7.2-stable_linux.x86_64.zip"
+  GODOT_BINARY: "Godot_v4.7.2-stable_linux.x86_64"
+  GODOT_SHA256: "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4"
+
+jobs:
+  repository-audit:
+    name: repository-audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Repository contract
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/validate_repository.py
+          python3 scripts/validate_runtime_patterns.py
+          python3 scripts/audit_repository.py
+
+      - name: Git whitespace audit
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git fetch --no-tags origin "${{ github.base_ref }}"
+          git diff --check "origin/${{ github.base_ref }}...HEAD"
+
+  godot-tests:
+    name: godot-tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Install verified Godot 4.7.2
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          mkdir -p "$RUNNER_TEMP/godot"
+          curl --fail --location --retry 4 --retry-delay 3 --proto '=https' --tlsv1.2 \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/${GODOT_ARCHIVE}" \
+            --output "$RUNNER_TEMP/godot/${GODOT_ARCHIVE}"
+          printf '%s  %s\n' "$GODOT_SHA256" "$RUNNER_TEMP/godot/${GODOT_ARCHIVE}" | sha256sum -c -
+          unzip -q "$RUNNER_TEMP/godot/${GODOT_ARCHIVE}" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/${GODOT_BINARY}"
+          echo "GODOT=$RUNNER_TEMP/godot/${GODOT_BINARY}" >> "$GITHUB_ENV"
+          "$RUNNER_TEMP/godot/${GODOT_BINARY}" --version
+
+      - name: Import project resources
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          "$GODOT" --headless --verbose --path . --import --quit \
+            --log-file godot-import.log >godot-import.stdout 2>&1
+          cat godot-import.stdout
+          ./scripts/check_godot_logs.sh godot-import.log godot-import.stdout
+
+      - name: Godot smoke test in project runtime
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          set +e
+          timeout 20s "$GODOT" --headless --verbose --path . \
+            res://tests/smoke_test.tscn --log-file godot-smoke.log \
+            2>&1 | tee godot-smoke.stdout
+          rc=${PIPESTATUS[0]}
+          set -e
+          if [[ "$rc" -ne 0 ]]; then
+            echo "ZOOQUEST_SMOKE_PROCESS_RC=$rc"
+            cat godot-smoke.log || true
+            ./scripts/check_godot_logs.sh godot-smoke.log godot-smoke.stdout || true
+            exit "$rc"
+          fi
+          grep -q 'ZOOQUEST_GODOT_SMOKE=PASS' godot-smoke.stdout godot-smoke.log || {
+            echo 'ZOOQUEST_GODOT_SMOKE_MARKER=MISSING'
+            cat godot-smoke.log || true
+            exit 1
+          }
+          grep -q 'ZOOQUEST_SMOKE_TEARDOWN=PASS' godot-smoke.stdout godot-smoke.log || {
+            echo 'ZOOQUEST_SMOKE_TEARDOWN_MARKER=MISSING'
+            cat godot-smoke.log || true
+            exit 1
+          }
+          ./scripts/check_godot_logs.sh godot-smoke.log godot-smoke.stdout
+
+      - name: Full flow transition regression in project runtime
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          set +e
+          timeout 30s "$GODOT" --headless --verbose --path . \
+            res://tests/flow_transition_test.tscn --log-file godot-flow.log \
+            2>&1 | tee godot-flow.stdout
+          rc=${PIPESTATUS[0]}
+          set -e
+          if [[ "$rc" -ne 0 ]]; then
+            echo "ZOOQUEST_FLOW_PROCESS_RC=$rc"
+            cat godot-flow.log || true
+            ./scripts/check_godot_logs.sh godot-flow.log godot-flow.stdout || true
+            exit "$rc"
+          fi
+          grep -q 'ZOOQUEST_FLOW_TRANSITION_TEST=PASS' godot-flow.stdout godot-flow.log || {
+            echo 'ZOOQUEST_FLOW_TRANSITION_TEST_MARKER=MISSING'
+            cat godot-flow.log || true
+            exit 1
+          }
+          grep -q 'ZOOQUEST_FLOW_TEARDOWN=PASS' godot-flow.stdout godot-flow.log || {
+            echo 'ZOOQUEST_FLOW_TEARDOWN_MARKER=MISSING'
+            cat godot-flow.log || true
+            exit 1
+          }
+          ./scripts/check_godot_logs.sh godot-flow.log godot-flow.stdout
+
+      - name: Main scene startup audit
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          set +e
+          timeout 20s "$GODOT" --headless --verbose --path . \
+            res://tests/main_startup_test.tscn --log-file godot-main.log \
+            2>&1 | tee godot-main.stdout
+          rc=${PIPESTATUS[0]}
+          set -e
+          if [[ "$rc" -ne 0 ]]; then
+            echo "ZOOQUEST_MAIN_STARTUP_PROCESS_RC=$rc"
+            cat godot-main.log || true
+            ./scripts/check_godot_logs.sh godot-main.log godot-main.stdout || true
+            exit "$rc"
+          fi
+          grep -q 'ZOOQUEST_MAIN_STARTUP=PASS' godot-main.stdout godot-main.log || {
+            echo 'ZOOQUEST_MAIN_STARTUP_MARKER=MISSING'
+            cat godot-main.log || true
+            exit 1
+          }
+          grep -q 'ZOOQUEST_MAIN_STARTUP_TEARDOWN=PASS' godot-main.stdout godot-main.log || {
+            echo 'ZOOQUEST_MAIN_STARTUP_TEARDOWN_MARKER=MISSING'
+            cat godot-main.log || true
+            exit 1
+          }
+          ./scripts/check_godot_logs.sh godot-main.log godot-main.stdout

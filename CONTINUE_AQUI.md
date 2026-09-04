@@ -2,6 +2,16 @@
 
 Este arquivo e o ponto de retomada do projeto.
 
+
+## Hotfix runtime FIX1 - 2026-09-03
+
+- Erro confirmado: `set_input_as_handled` em viewport nulo durante transicoes.
+- Causa raiz corrigida em `ui/transformation_screen.gd` e `ui/narrative_screen.gd`.
+- Navegacao endurecida com `CONNECT_DEFERRED` em `core/main.gd`.
+- Teste de regressao: `scripts/validate_runtime_patterns.py`.
+- Teste de fluxo Godot: `tests/flow_transition_test.gd`.
+- Status: aguardando reteste completo no Godot antes de declarar runtime 100% operacional.
+
 ## Estado atual
 
 - Projeto Godot 4.x estruturado e autossuficiente.

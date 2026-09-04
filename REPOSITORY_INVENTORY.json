@@ -1,27 +1,31 @@
 {
   "project": "ZooQuest: A Jornada do Aprendizado",
-  "state": "VERSAO_FUNCIONAL_LOCAL",
-  "file_count_excluding_manifest_inventory": 84,
-  "total_bytes_excluding_manifest_inventory": 3814149,
+  "state": "GOVERNED_REPOSITORY_RUNTIME_GATED",
+  "godot_version": "4.7.2",
+  "file_count_excluding_manifest_inventory": 141,
+  "total_bytes_excluding_manifest_inventory": 3880577,
   "counts_by_extension": {
     ".asta": 1,
     ".docx": 2,
-    ".gd": 22,
+    ".gd": 24,
     ".godot": 1,
-    ".json": 3,
-    ".md": 14,
+    ".import": 6,
+    ".json": 4,
+    ".md": 23,
     ".pdf": 5,
     ".png": 9,
-    ".py": 1,
-    ".sh": 2,
+    ".py": 4,
+    ".sh": 5,
     ".svg": 1,
-    ".tscn": 9,
-    ".txt": 6,
+    ".tscn": 12,
+    ".txt": 9,
+    ".uid": 22,
     ".wav": 5,
-    "[no_extension]": 3
+    ".yml": 3,
+    "[no_extension]": 5
   },
-  "godot_scenes": 9,
-  "gdscript_files": 22,
+  "godot_scenes": 12,
+  "gdscript_files": 24,
   "questions": 9,
   "flow_steps": 13,
   "minigames": [
@@ -29,7 +33,12 @@
     "bird",
     "worm"
   ],
-  "static_validation": "PASS",
-  "runtime_validation": "BLOCKED_ENGINE_NOT_FOUND_IN_GENERATION_ENVIRONMENT",
-  "report_pdf_pages": 13
+  "static_validation": "ENFORCED_BY_PRE_PR_AND_CI",
+  "runtime_validation": "ENFORCED_BY_GITHUB_ACTIONS_GODOT_4_7_2",
+  "required_checks": [
+    "repository-audit",
+    "godot-tests"
+  ],
+  "manifest_contract": "SHA256 of all tracked regular files except MANIFEST.sha256; includes REPOSITORY_INVENTORY.json",
+  "metadata_generator": "scripts/update_repository_metadata.py"
 }

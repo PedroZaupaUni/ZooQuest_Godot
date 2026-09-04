@@ -1,0 +1,46 @@
+name: Bug de gameplay/runtime
+description: Registre um defeito reproduzivel no ZooQuest.
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Resumo
+      description: O que aconteceu?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para reproduzir
+      placeholder: |
+        1. Abrir o jogo
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Resultado obtido
+    validations:
+      required: true
+  - type: input
+    id: godot
+    attributes:
+      label: Versao do Godot
+      placeholder: 4.7.2.stable
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Debugger / evidencias
+      description: Cole apenas o trecho relevante; anexe prints quando necessario.
