@@ -18,15 +18,62 @@ fi
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-"$GODOT" --headless --path "$ROOT" --import --quit --log-file "$TMP/import.log" >"$TMP/import.stdout" 2>&1
+print_logs() {
+  local prefix="$1"
+  for file in "$TMP/${prefix}.stdout" "$TMP/${prefix}.log"; do
+    if [[ -f "$file" ]]; then
+      echo "===== $file ====="
+      cat "$file" || true
+    fi
+  done
+}
+
+run_scene_test() {
+  local label="$1"
+  local scene="$2"
+  local pass_marker="$3"
+  local seconds="$4"
+  local prefix="$5"
+
+  echo "== $label =="
+  set +e
+  timeout "${seconds}s" "$GODOT" --headless --path "$ROOT" "$scene" \
+    --log-file "$TMP/${prefix}.log" 2>&1 | tee "$TMP/${prefix}.stdout"
+  local rc=${PIPESTATUS[0]}
+  set -e
+
+  if [[ "$rc" -ne 0 ]]; then
+    echo "${prefix^^}_PROCESS_RC=$rc"
+    print_logs "$prefix"
+    ./scripts/check_godot_logs.sh "$TMP/${prefix}.log" "$TMP/${prefix}.stdout" || true
+    return "$rc"
+  fi
+
+  if ! grep -q "$pass_marker" "$TMP/${prefix}.stdout" "$TMP/${prefix}.log"; then
+    echo "${prefix^^}_PASS_MARKER=MISSING"
+    print_logs "$prefix"
+    return 1
+  fi
+
+  ./scripts/check_godot_logs.sh "$TMP/${prefix}.log" "$TMP/${prefix}.stdout"
+}
+
+"$GODOT" --headless --path "$ROOT" --import --quit \
+  --log-file "$TMP/import.log" >"$TMP/import.stdout" 2>&1
 ./scripts/check_godot_logs.sh "$TMP/import.log" "$TMP/import.stdout"
 
-timeout 90s "$GODOT" --headless --path "$ROOT" res://tests/smoke_test.tscn --log-file "$TMP/smoke.log" 2>&1 | tee "$TMP/smoke.stdout"
-grep -q 'ZOOQUEST_GODOT_SMOKE=PASS' "$TMP/smoke.stdout" "$TMP/smoke.log"
-./scripts/check_godot_logs.sh "$TMP/smoke.log" "$TMP/smoke.stdout"
+run_scene_test \
+  "GODOT SMOKE" \
+  "res://tests/smoke_test.tscn" \
+  "ZOOQUEST_GODOT_SMOKE=PASS" \
+  30 \
+  "smoke"
 
-timeout 90s "$GODOT" --headless --path "$ROOT" res://tests/flow_transition_test.tscn --log-file "$TMP/flow.log" 2>&1 | tee "$TMP/flow.stdout"
-grep -q 'ZOOQUEST_FLOW_TRANSITION_TEST=PASS' "$TMP/flow.stdout" "$TMP/flow.log"
-./scripts/check_godot_logs.sh "$TMP/flow.log" "$TMP/flow.stdout"
+run_scene_test \
+  "GODOT FLOW" \
+  "res://tests/flow_transition_test.tscn" \
+  "ZOOQUEST_FLOW_TRANSITION_TEST=PASS" \
+  45 \
+  "flow"
 
 echo "ZOOQUEST_LOCAL_GODOT_TESTS=PASS"

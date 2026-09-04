@@ -84,16 +84,44 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
-          timeout 90s "$GODOT" --headless --path . res://tests/smoke_test.tscn --log-file godot-smoke.log 2>&1 | tee godot-smoke.stdout
-          grep -q 'ZOOQUEST_GODOT_SMOKE=PASS' godot-smoke.stdout godot-smoke.log
+          set +e
+          timeout 30s "$GODOT" --headless --path . res://tests/smoke_test.tscn \
+            --log-file godot-smoke.log 2>&1 | tee godot-smoke.stdout
+          rc=${PIPESTATUS[0]}
+          set -e
+          if [[ "$rc" -ne 0 ]]; then
+            echo "ZOOQUEST_SMOKE_PROCESS_RC=$rc"
+            cat godot-smoke.log || true
+            ./scripts/check_godot_logs.sh godot-smoke.log godot-smoke.stdout || true
+            exit "$rc"
+          fi
+          grep -q 'ZOOQUEST_GODOT_SMOKE=PASS' godot-smoke.stdout godot-smoke.log || {
+            echo 'ZOOQUEST_GODOT_SMOKE_MARKER=MISSING'
+            cat godot-smoke.log || true
+            exit 1
+          }
           ./scripts/check_godot_logs.sh godot-smoke.log godot-smoke.stdout
 
       - name: Full flow transition regression in project runtime
         shell: bash
         run: |
           set -Eeuo pipefail
-          timeout 90s "$GODOT" --headless --path . res://tests/flow_transition_test.tscn --log-file godot-flow.log 2>&1 | tee godot-flow.stdout
-          grep -q 'ZOOQUEST_FLOW_TRANSITION_TEST=PASS' godot-flow.stdout godot-flow.log
+          set +e
+          timeout 45s "$GODOT" --headless --path . res://tests/flow_transition_test.tscn \
+            --log-file godot-flow.log 2>&1 | tee godot-flow.stdout
+          rc=${PIPESTATUS[0]}
+          set -e
+          if [[ "$rc" -ne 0 ]]; then
+            echo "ZOOQUEST_FLOW_PROCESS_RC=$rc"
+            cat godot-flow.log || true
+            ./scripts/check_godot_logs.sh godot-flow.log godot-flow.stdout || true
+            exit "$rc"
+          fi
+          grep -q 'ZOOQUEST_FLOW_TRANSITION_TEST=PASS' godot-flow.stdout godot-flow.log || {
+            echo 'ZOOQUEST_FLOW_TRANSITION_TEST_MARKER=MISSING'
+            cat godot-flow.log || true
+            exit 1
+          }
           ./scripts/check_godot_logs.sh godot-flow.log godot-flow.stdout
 
       - name: Main scene startup audit
@@ -106,6 +134,7 @@ jobs:
           set -e
           cat godot-main.stdout
           if [[ "$rc" -ne 0 && "$rc" -ne 124 ]]; then
+            cat godot-main.log || true
             exit "$rc"
           fi
           ./scripts/check_godot_logs.sh godot-main.log godot-main.stdout

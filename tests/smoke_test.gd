@@ -46,37 +46,50 @@ func _fail(message: String) -> void:
 
 func _run() -> void:
     for autoload_name in AUTOLOADS:
-        var singleton := get_node_or_null("/root/" + autoload_name)
+        var singleton: Node = get_node_or_null("/root/" + autoload_name)
         if singleton == null:
             _fail("Autoload ausente no runtime: " + autoload_name)
 
-    var question_bank := get_node_or_null("/root/QuestionBank")
+    var question_bank: Node = get_node_or_null("/root/QuestionBank")
     if question_bank != null and not bool(question_bank.call("is_ready_for_game")):
         _fail("QuestionBank carregou, mas nao esta pronto para o jogo")
 
-    var flow_repository := get_node_or_null("/root/FlowRepository")
+    var flow_repository: Node = get_node_or_null("/root/FlowRepository")
     if flow_repository != null and not bool(flow_repository.call("is_ready_for_game")):
         _fail("FlowRepository carregou, mas nao esta pronto para o jogo")
 
     for script_path in SCRIPTS:
-        var script_resource := ResourceLoader.load(script_path, "", ResourceLoader.CACHE_MODE_IGNORE)
+        var script_resource: Resource = ResourceLoader.load(
+            script_path,
+            "",
+            ResourceLoader.CACHE_MODE_IGNORE
+        )
         if script_resource == null:
             _fail("Falha ao carregar script: " + script_path)
-        elif not script_resource is Script:
+            continue
+        if not script_resource is Script:
             _fail("Recurso nao e Script: " + script_path)
-        elif not script_resource.can_instantiate():
+            continue
+
+        var script: Script = script_resource as Script
+        if not script.can_instantiate():
             _fail("Script nao pode ser instanciado/compilado: " + script_path)
 
     for scene_path in SCENES:
-        var resource := ResourceLoader.load(scene_path, "", ResourceLoader.CACHE_MODE_IGNORE)
-        if resource == null:
+        var scene_resource: Resource = ResourceLoader.load(
+            scene_path,
+            "",
+            ResourceLoader.CACHE_MODE_IGNORE
+        )
+        if scene_resource == null:
             _fail("Falha ao carregar cena: " + scene_path)
             continue
-        if not resource is PackedScene:
+        if not scene_resource is PackedScene:
             _fail("Recurso nao e PackedScene: " + scene_path)
             continue
 
-        var instance := resource.instantiate()
+        var packed_scene: PackedScene = scene_resource as PackedScene
+        var instance: Node = packed_scene.instantiate()
         if instance == null:
             _fail("Falha ao instanciar cena: " + scene_path)
             continue
