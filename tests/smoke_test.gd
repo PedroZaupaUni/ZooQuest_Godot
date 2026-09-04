@@ -44,32 +44,43 @@ func _fail(message: String) -> void:
     failures.append(message)
     push_error(message)
 
-func _cleanup_audio() -> void:
+func _settle(frames: int = 2) -> void:
+    for _i in range(frames):
+        await get_tree().process_frame
+
+func _prepare_test_runtime() -> void:
     var audio_manager: Node = get_node_or_null("/root/AudioManager")
     if audio_manager == null:
-        _fail("AudioManager ausente durante teardown do smoke")
+        _fail("AudioManager ausente no runtime")
+        return
+    if not audio_manager.has_method("set_sfx_enabled"):
+        _fail("AudioManager sem set_sfx_enabled para testes headless")
+        return
+
+    # O smoke testa compilacao/instanciacao, nao o mixer de audio. Desabilitar
+    # SFX antes de instanciar as cenas impede AudioStreamPlayer efemero de
+    # contaminar o shutdown do runner headless, sem alterar o gameplay normal.
+    audio_manager.call("set_sfx_enabled", false)
+    await _settle(2)
+
+func _assert_clean_audio() -> void:
+    var audio_manager: Node = get_node_or_null("/root/AudioManager")
+    if audio_manager == null:
+        _fail("AudioManager ausente no teardown")
         return
     if not audio_manager.has_method("stop_all_sfx") or not audio_manager.has_method("active_sfx_count"):
         _fail("AudioManager sem contrato de teardown deterministico")
         return
 
     audio_manager.call("stop_all_sfx")
-    # queue_free() e processado ao fim do frame. Dois frames deixam o teardown
-    # independente da ordem em que sinais finished/deletion forem drenados.
-    await get_tree().process_frame
-    await get_tree().process_frame
-
+    await _settle(3)
     var remaining: int = int(audio_manager.call("active_sfx_count"))
     if remaining != 0:
         _fail("Audio players ativos apos teardown do smoke: %d" % remaining)
 
-func _finish(exit_code: int) -> void:
-    # Deixe _run() retornar antes de encerrar o SceneTree para liberar referencias
-    # locais de Resource/PackedScene/Script usadas durante a auditoria.
-    await get_tree().process_frame
-    get_tree().quit(exit_code)
-
 func _run() -> void:
+    await _prepare_test_runtime()
+
     for autoload_name in AUTOLOADS:
         var singleton: Node = get_node_or_null("/root/" + autoload_name)
         if singleton == null:
@@ -83,12 +94,10 @@ func _run() -> void:
     if flow_repository != null and not bool(flow_repository.call("is_ready_for_game")):
         _fail("FlowRepository carregou, mas nao esta pronto para o jogo")
 
+    # Carrega explicitamente os scripts principais para transformar erro de parse
+    # ou compilacao em falha do smoke antes de qualquer merge.
     for script_path in SCRIPTS:
-        var script_resource: Resource = ResourceLoader.load(
-            script_path,
-            "",
-            ResourceLoader.CACHE_MODE_IGNORE
-        )
+        var script_resource: Resource = ResourceLoader.load(script_path)
         if script_resource == null:
             _fail("Falha ao carregar script: " + script_path)
             continue
@@ -100,12 +109,13 @@ func _run() -> void:
         if not script.can_instantiate():
             _fail("Script nao pode ser instanciado/compilado: " + script_path)
 
+        script = null
+        script_resource = null
+
+    # Cada cena e colocada no SceneTree e depois destruida SINCRONAMENTE. Isso
+    # valida _ready() e os preloads, mas nao deixa queue_free pendente no quit.
     for scene_path in SCENES:
-        var scene_resource: Resource = ResourceLoader.load(
-            scene_path,
-            "",
-            ResourceLoader.CACHE_MODE_IGNORE
-        )
+        var scene_resource: Resource = ResourceLoader.load(scene_path)
         if scene_resource == null:
             _fail("Falha ao carregar cena: " + scene_path)
             continue
@@ -120,21 +130,29 @@ func _run() -> void:
             continue
 
         add_child(instance)
-        await get_tree().process_frame
-        instance.queue_free()
-        await get_tree().process_frame
+        await _settle(2)
 
-    # Algumas cenas disparam SFX no _ready(). Como AudioManager e autoload,
-    # esses players sobrevivem ao free da cena e precisam ser drenados antes
-    # do encerramento acelerado do teste.
-    await _cleanup_audio()
+        if is_instance_valid(instance):
+            if instance.get_parent() == self:
+                remove_child(instance)
+            instance.free()
+
+        instance = null
+        packed_scene = null
+        scene_resource = null
+        await _settle(2)
+
+    await _assert_clean_audio()
 
     var exit_code: int = 0
     if failures.is_empty():
+        print("ZOOQUEST_SMOKE_TEARDOWN=PASS")
         print("ZOOQUEST_GODOT_SMOKE=PASS")
     else:
         exit_code = 1
         print("ZOOQUEST_GODOT_SMOKE=FAIL")
         print("FAILURES=" + str(failures.size()))
 
-    call_deferred("_finish", exit_code)
+    # Agenda o quit diretamente no SceneTree. _run() retorna antes de o motor
+    # encerrar, eliminando a coroutine _finish que mantinha referencias vivas.
+    get_tree().call_deferred("quit", exit_code)

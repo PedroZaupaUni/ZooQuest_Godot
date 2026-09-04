@@ -5,6 +5,12 @@ cd "$ROOT"
 
 python3 scripts/validate_repository.py
 python3 scripts/validate_runtime_patterns.py
+
+# Metadata e manifesto sao derivados do estado rastreado. Atualize-os antes da
+# auditoria final para que nao fiquem obsoletos apos alteracoes no projeto.
+git add -A
+python3 scripts/update_repository_metadata.py
+git add -A
 python3 scripts/audit_repository.py
 
 git diff --check

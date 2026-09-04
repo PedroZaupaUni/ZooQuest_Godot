@@ -4,6 +4,10 @@
 export.cfg
 export_presets.cfg
 
+# Python local validation cache
+__pycache__/
+*.pyc
+
 # Editor / OS
 .vscode/
 .idea/

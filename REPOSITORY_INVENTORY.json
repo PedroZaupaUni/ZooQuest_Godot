@@ -1,27 +1,31 @@
 {
   "project": "ZooQuest: A Jornada do Aprendizado",
-  "state": "FIX1_RUNTIME_HARDENING_AGUARDANDO_RETESTE_COMPLETO",
-  "file_count_excluding_manifest_inventory": 88,
-  "total_bytes_excluding_manifest_inventory": 3824880,
+  "state": "GOVERNED_REPOSITORY_RUNTIME_GATED",
+  "godot_version": "4.7.2",
+  "file_count_excluding_manifest_inventory": 141,
+  "total_bytes_excluding_manifest_inventory": 3880577,
   "counts_by_extension": {
     ".asta": 1,
     ".docx": 2,
-    ".gd": 23,
+    ".gd": 24,
     ".godot": 1,
-    ".json": 3,
-    ".md": 16,
+    ".import": 6,
+    ".json": 4,
+    ".md": 23,
     ".pdf": 5,
     ".png": 9,
-    ".py": 2,
-    ".sh": 2,
+    ".py": 4,
+    ".sh": 5,
     ".svg": 1,
-    ".tscn": 9,
-    ".txt": 6,
+    ".tscn": 12,
+    ".txt": 9,
+    ".uid": 22,
     ".wav": 5,
-    "[no_extension]": 3
+    ".yml": 3,
+    "[no_extension]": 5
   },
-  "godot_scenes": 9,
-  "gdscript_files": 23,
+  "godot_scenes": 12,
+  "gdscript_files": 24,
   "questions": 9,
   "flow_steps": 13,
   "minigames": [
@@ -29,9 +33,12 @@
     "bird",
     "worm"
   ],
-  "static_validation": "PASS",
-  "runtime_pattern_validation": "PASS",
-  "runtime_validation": "PARTIAL_USER_EVIDENCE_PRE_FIX1; FULL_RETEST_PENDING",
-  "known_crash_root_cause": "fixed: input handled after synchronous stage replacement",
-  "report_pdf_pages": 13
+  "static_validation": "ENFORCED_BY_PRE_PR_AND_CI",
+  "runtime_validation": "ENFORCED_BY_GITHUB_ACTIONS_GODOT_4_7_2",
+  "required_checks": [
+    "repository-audit",
+    "godot-tests"
+  ],
+  "manifest_contract": "SHA256 of all tracked regular files except MANIFEST.sha256; includes REPOSITORY_INVENTORY.json",
+  "metadata_generator": "scripts/update_repository_metadata.py"
 }

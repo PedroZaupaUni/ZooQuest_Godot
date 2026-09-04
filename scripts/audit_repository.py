@@ -29,15 +29,14 @@ def tracked_files() -> list[Path]:
 files = tracked_files()
 rel = [p.relative_to(ROOT).as_posix() for p in files]
 
-# Arquivos locais/gerados que nao devem entrar no historico.
 for path in rel:
     check(not path.startswith(".godot/"), f"arquivo gerado rastreado: {path}")
     check(not re.match(r"^validation/FIX1_[^/]+/", path), f"log local FIX1 rastreado: {path}")
     check(not re.match(r"^validation/GOVERNANCE_[^/]+/", path), f"log local governance rastreado: {path}")
-    check(not path.endswith((".log", ".tmp", ".swp")), f"temporario/log rastreado: {path}")
+    check(not path.endswith((".log", ".tmp", ".swp", ".pyc")), f"temporario/log/cache rastreado: {path}")
+    check("/__pycache__/" not in ("/" + path), f"__pycache__ rastreado: {path}")
     check(not path.endswith(".patch"), f"patch operacional nao deve ser rastreado: {path}")
 
-# Evita arquivos grandes acidentais no projeto academico.
 MAX_BYTES = 25 * 1024 * 1024
 for p in files:
     if p.exists() and p.is_file():
@@ -46,16 +45,21 @@ for p in files:
 required = [
     "project.godot",
     "core/main.gd",
+    "core/audio_manager.gd",
     "data/questions.json",
     "data/story_flow.json",
     "scripts/validate_repository.py",
     "scripts/validate_runtime_patterns.py",
     "scripts/audit_repository.py",
     "scripts/check_godot_logs.sh",
+    "scripts/run_godot_smoke.sh",
+    "scripts/update_repository_metadata.py",
     "tests/smoke_test.gd",
     "tests/smoke_test.tscn",
     "tests/flow_transition_test.gd",
     "tests/flow_transition_test.tscn",
+    "tests/main_startup_test.gd",
+    "tests/main_startup_test.tscn",
     ".github/workflows/ci.yml",
     ".github/pull_request_template.md",
     ".github/CODEOWNERS",
@@ -64,7 +68,6 @@ required = [
 for item in required:
     check((ROOT / item).is_file(), f"arquivo obrigatorio ausente: {item}")
 
-# JSONs canonicos devem ser validos.
 for item in ("data/questions.json", "data/story_flow.json"):
     try:
         json.loads((ROOT / item).read_text(encoding="utf-8"))
@@ -83,16 +86,52 @@ check(re.search(r"(?m)^permissions:\s*$", workflow) is not None, "workflow sem b
 check(re.search(r"(?m)^\s{2}contents:\s*read\s*$", workflow) is not None, "GITHUB_TOKEN nao esta contents: read")
 check("smoke_test.tscn" in workflow, "CI nao executa smoke em cena de runtime")
 check("flow_transition_test.tscn" in workflow, "CI nao executa flow em cena de runtime")
+check("main_startup_test.tscn" in workflow, "CI nao executa startup limpo da Main")
 check("check_godot_logs.sh" in workflow, "CI nao audita logs Godot")
+check("--verbose" in workflow, "CI Godot sem --verbose para diagnostico de leaks")
+check("GODOT_SHA256" in workflow, "CI nao fixa SHA-256 do binario Godot")
+check("sha256sum -c" in workflow, "CI nao verifica SHA-256 do binario Godot")
+check("Godot_v4.7.2-stable_linux.x86_64.zip" in workflow, "CI nao fixa artefato Godot 4.7.2")
+old_main_kill = 'timeout 8s "$GODOT" --headless --path . --log-file godot-main.log'
+check(old_main_kill not in workflow, "CI ainda mata a Main por timeout em vez de teardown limpo")
 
-# Actions externas devem estar fixadas em SHA completo.
+# Contratos de lifecycle dos testes e do AudioManager.
+audio_text = (ROOT / "core/audio_manager.gd").read_text(encoding="utf-8")
+check("func set_sfx_enabled(" in audio_text, "AudioManager sem chave deterministica para testes")
+check("player.stream = null" in audio_text, "AudioManager nao libera referencia do AudioStream")
+check("player.free()" in audio_text, "AudioManager sem teardown sincrono dos players")
+check("func active_sfx_count()" in audio_text, "AudioManager sem contador de players para gate")
+
+for test_file in ("tests/smoke_test.gd", "tests/flow_transition_test.gd", "tests/main_startup_test.gd"):
+    test_text = (ROOT / test_file).read_text(encoding="utf-8")
+    check("set_sfx_enabled" in test_text, f"{test_file} nao desabilita SFX no runner headless")
+    check('call_deferred("quit"' in test_text, f"{test_file} nao agenda quit depois do teardown")
+    check("CACHE_MODE_IGNORE" not in test_text, f"{test_file} usa CACHE_MODE_IGNORE e pode prolongar lifetime de resources")
+
+smoke_text = (ROOT / "tests/smoke_test.gd").read_text(encoding="utf-8")
+check("instance.free()" in smoke_text, "smoke nao destrói cenas sincronamente")
+check("ZOOQUEST_SMOKE_TEARDOWN=PASS" in smoke_text, "smoke sem gate explicito de teardown")
+
+flow_text = (ROOT / "tests/flow_transition_test.gd").read_text(encoding="utf-8")
+check("const MainScene := preload" not in flow_text, "flow mantem PackedScene global ate o shutdown")
+check("main.free()" in flow_text, "flow nao destrói Main sincronamente")
+check("ZOOQUEST_FLOW_TEARDOWN=PASS" in flow_text, "flow sem gate explicito de teardown")
+
+main_test_text = (ROOT / "tests/main_startup_test.gd").read_text(encoding="utf-8")
+check('str(game_state.get("current_phase")) != "menu"' in main_test_text, "startup nao valida fase menu")
+check("StageHost" in main_test_text, "startup nao valida StageHost")
+check("ZOOQUEST_MAIN_STARTUP_TEARDOWN=PASS" in main_test_text, "startup sem gate explicito de teardown")
+
+log_audit = (ROOT / "scripts/check_godot_logs.sh").read_text(encoding="utf-8")
+check("ObjectDB instances.*leaked at exit" in log_audit, "log audit nao cobre ObjectDB leaks")
+check("resources still in use at exit" in log_audit, "log audit nao cobre Resource leaks")
+
 for m in re.finditer(r"(?m)^\s*-?\s*uses:\s*([^@\s]+)@([^\s#]+)", workflow):
     action, ref = m.groups()
     if action.startswith("./"):
         continue
     check(bool(re.fullmatch(r"[0-9a-fA-F]{40}", ref)), f"Action nao pinada em SHA: {action}@{ref}")
 
-# Marcadores de conflito em arquivos-fonte/configuracao.
 text_suffixes = {".gd", ".tscn", ".tres", ".json", ".yml", ".yaml", ".md", ".cfg", ".godot", ".py", ".sh"}
 for p in files:
     if p.suffix.lower() not in text_suffixes and p.name != "project.godot":
