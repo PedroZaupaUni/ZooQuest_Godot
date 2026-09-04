@@ -44,6 +44,31 @@ func _fail(message: String) -> void:
     failures.append(message)
     push_error(message)
 
+func _cleanup_audio() -> void:
+    var audio_manager: Node = get_node_or_null("/root/AudioManager")
+    if audio_manager == null:
+        _fail("AudioManager ausente durante teardown do smoke")
+        return
+    if not audio_manager.has_method("stop_all_sfx") or not audio_manager.has_method("active_sfx_count"):
+        _fail("AudioManager sem contrato de teardown deterministico")
+        return
+
+    audio_manager.call("stop_all_sfx")
+    # queue_free() e processado ao fim do frame. Dois frames deixam o teardown
+    # independente da ordem em que sinais finished/deletion forem drenados.
+    await get_tree().process_frame
+    await get_tree().process_frame
+
+    var remaining: int = int(audio_manager.call("active_sfx_count"))
+    if remaining != 0:
+        _fail("Audio players ativos apos teardown do smoke: %d" % remaining)
+
+func _finish(exit_code: int) -> void:
+    # Deixe _run() retornar antes de encerrar o SceneTree para liberar referencias
+    # locais de Resource/PackedScene/Script usadas durante a auditoria.
+    await get_tree().process_frame
+    get_tree().quit(exit_code)
+
 func _run() -> void:
     for autoload_name in AUTOLOADS:
         var singleton: Node = get_node_or_null("/root/" + autoload_name)
@@ -99,10 +124,17 @@ func _run() -> void:
         instance.queue_free()
         await get_tree().process_frame
 
+    # Algumas cenas disparam SFX no _ready(). Como AudioManager e autoload,
+    # esses players sobrevivem ao free da cena e precisam ser drenados antes
+    # do encerramento acelerado do teste.
+    await _cleanup_audio()
+
+    var exit_code: int = 0
     if failures.is_empty():
         print("ZOOQUEST_GODOT_SMOKE=PASS")
-        get_tree().quit(0)
     else:
+        exit_code = 1
         print("ZOOQUEST_GODOT_SMOKE=FAIL")
         print("FAILURES=" + str(failures.size()))
-        get_tree().quit(1)
+
+    call_deferred("_finish", exit_code)

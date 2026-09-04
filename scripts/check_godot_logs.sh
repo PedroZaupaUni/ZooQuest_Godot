@@ -6,7 +6,7 @@ if [[ "$#" -lt 1 ]]; then
   exit 2
 fi
 
-PATTERN='SCRIPT ERROR:|Compile Error:|Parse Error:|Parser Error:|Failed to load script|Invalid call|Cannot call method|Invalid get index|Invalid access|^ERROR:'
+PATTERN='SCRIPT ERROR:|Compile Error:|Parse Error:|Parser Error:|Failed to load script|Invalid call|Cannot call method|Invalid get index|Invalid access|ObjectDB instances.*leaked at exit|resources still in use at exit|^ERROR:'
 
 if grep -Ein "$PATTERN" "$@" 2>/dev/null; then
   echo "ZOOQUEST_GODOT_LOG_AUDIT=FAIL"

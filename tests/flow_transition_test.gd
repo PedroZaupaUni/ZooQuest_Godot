@@ -45,13 +45,32 @@ func _settle(frames: int = 2) -> void:
     for _i in range(frames):
         await get_tree().process_frame
 
+func _cleanup_audio() -> void:
+    var audio_manager: Node = get_node_or_null("/root/AudioManager")
+    if audio_manager == null:
+        _fail("AudioManager ausente durante teardown do flow")
+        return
+    if not audio_manager.has_method("stop_all_sfx") or not audio_manager.has_method("active_sfx_count"):
+        _fail("AudioManager sem contrato de teardown deterministico")
+        return
+
+    audio_manager.call("stop_all_sfx")
+    await _settle(2)
+    var remaining: int = int(audio_manager.call("active_sfx_count"))
+    if remaining != 0:
+        _fail("Audio players ativos apos teardown do flow: %d" % remaining)
+
+func _finish(exit_code: int) -> void:
+    await _settle(1)
+    get_tree().quit(exit_code)
+
 func _run() -> void:
     if game_state == null:
         print("ZOOQUEST_FLOW_TRANSITION_TEST=FAIL")
-        get_tree().quit(1)
+        call_deferred("_finish", 1)
         return
 
-    var main = MainScene.instantiate()
+    var main: Node = MainScene.instantiate()
     add_child(main)
     await _settle(2)
     _assert_phase("menu", "inicio")
@@ -131,12 +150,15 @@ func _run() -> void:
     _assert_phase("menu", "narrativa -> menu")
 
     main.queue_free()
-    await _settle(1)
+    await _settle(2)
+    await _cleanup_audio()
 
+    var exit_code: int = 0
     if failures.is_empty():
         print("ZOOQUEST_FLOW_TRANSITION_TEST=PASS")
-        get_tree().quit(0)
     else:
+        exit_code = 1
         print("ZOOQUEST_FLOW_TRANSITION_TEST=FAIL")
         print("FAILURES=" + str(failures.size()))
-        get_tree().quit(1)
+
+    call_deferred("_finish", exit_code)
