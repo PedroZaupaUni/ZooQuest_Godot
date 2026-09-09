@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://ce7bx4g7wfgrm"]
 
-[ext_resource type="Script" path="res://minigames/frog/frog_minigame.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://rv2xlghlyran" path="res://minigames/frog/frog_minigame.gd" id="1_script"]
 
-[node name="FrogMinigame" type="Node2D"]
+[node name="FrogMinigame" type="Node2D" unique_id=693304897]
 script = ExtResource("1_script")

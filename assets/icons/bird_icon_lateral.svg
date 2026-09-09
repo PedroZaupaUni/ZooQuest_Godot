@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320">
+  <!-- Passaro azul, flat design, perfil lateral voando (proporcao mais esguia) -->
+
+  <!-- sombra de contato (usada quando o icone fica sobre fundo claro) -->
+  <ellipse cx="230" cy="300" rx="150" ry="14" fill="#0c1f3d" opacity="0.14"/>
+
+  <g id="grupoPassaroLateral">
+    <!-- cauda bifurcada atras do corpo -->
+    <path d="M 150 205 C 105 210 65 220 25 200 C 60 200 95 195 128 182 Z" fill="#f3b23c"/>
+    <path d="M 150 195 C 100 188 55 178 15 145 C 55 158 95 162 132 168 Z" fill="#1f3f74"/>
+
+    <!-- corpo principal (mais fino/alongado que a referencia) -->
+    <path d="M 120 200
+      C 108 160 128 122 168 104
+      C 210 86 262 88 300 112
+      C 322 126 332 146 332 168
+      C 332 196 314 218 284 226
+      C 240 236 180 234 148 222
+      C 134 217 124 210 120 200 Z"
+      fill="#3d72d6"/>
+
+    <!-- barriga clara -->
+    <path d="M 150 210 C 165 224 200 230 230 226 C 214 216 196 208 182 196 C 170 200 158 205 150 210 Z" fill="#eaf3ff" opacity="0.85"/>
+
+    <!-- cabeca -->
+    <circle cx="322" cy="150" r="60" fill="#3d72d6"/>
+
+    <!-- asa levantada, com "penas" marcadas por formas mais escuras (sem gradiente) -->
+    <path d="M 190 168 C 168 132 178 90 218 66 C 246 100 252 140 236 176 C 220 186 202 182 190 168 Z" fill="#2a5bb8"/>
+    <path d="M 200 158 C 186 130 194 100 222 82 C 240 106 244 134 232 160 C 220 166 208 166 200 158 Z" fill="#e9f0ff" opacity="0.28"/>
+    <path d="M 205 150 L 224 96 M 214 158 L 232 108 M 200 138 L 216 90" stroke="#1f3f74" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+
+    <!-- bico -->
+    <path d="M 372 138 L 412 150 L 372 166 Z" fill="#1f3f74"/>
+
+    <!-- olho -->
+    <circle cx="348" cy="130" r="15" fill="#ffffff"/>
+    <circle cx="352" cy="132" r="8.5" fill="#16233c"/>
+    <circle cx="349" cy="127" r="2.6" fill="#ffffff"/>
+  </g>
+</svg>
