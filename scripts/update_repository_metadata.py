@@ -54,7 +54,7 @@ inventory = {
     "minigames": ["frog", "bird", "worm"],
     "static_validation": "ENFORCED_BY_PRE_PR_AND_CI",
     "runtime_validation": "ENFORCED_BY_GITHUB_ACTIONS_GODOT_4_7_2",
-    "required_checks": ["repository-audit", "godot-tests"],
+    "required_checks": ["branch-policy", "repository-audit", "godot-tests"],
     "manifest_contract": "SHA256 of all tracked regular files except MANIFEST.sha256; includes REPOSITORY_INVENTORY.json",
     "metadata_generator": "scripts/update_repository_metadata.py",
 }
