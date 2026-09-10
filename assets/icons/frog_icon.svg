@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Sapo flat design, de frente, mais esguio, pose dinamica (estilo alinhado ao passaro/minhoca laterais) -->
+
+  <ellipse cx="200" cy="356" rx="112" ry="15" fill="#1c3312" opacity="0.20"/>
+
+  <!-- rastro de "pulo" sugerindo movimento -->
+  <path d="M 70 300 C 55 292 46 280 44 266" stroke="#3c8a1e" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.4"/>
+  <path d="M 88 320 C 70 314 58 302 54 288" stroke="#3c8a1e" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.3"/>
+
+  <g id="grupoSapoFlat">
+    <!-- pernas traseiras, mais finas -->
+    <ellipse cx="112" cy="272" rx="38" ry="50" fill="#41911f"/>
+    <ellipse cx="288" cy="272" rx="38" ry="50" fill="#41911f"/>
+
+    <!-- pes traseiros -->
+    <g>
+      <ellipse cx="76" cy="332" rx="24" ry="13" fill="#41911f"/>
+      <circle cx="60" cy="336" r="7" fill="#579c2c"/>
+      <circle cx="76" cy="340" r="7" fill="#579c2c"/>
+      <circle cx="92" cy="336" r="7" fill="#579c2c"/>
+    </g>
+    <g>
+      <ellipse cx="324" cy="332" rx="24" ry="13" fill="#41911f"/>
+      <circle cx="308" cy="336" r="7" fill="#579c2c"/>
+      <circle cx="324" cy="340" r="7" fill="#579c2c"/>
+      <circle cx="340" cy="336" r="7" fill="#579c2c"/>
+    </g>
+
+    <!-- corpo principal, mais estreito e alto (menos "gordo") -->
+    <ellipse cx="200" cy="222" rx="88" ry="98" fill="#5cb52e"/>
+
+    <!-- cabeca/bochechas (bolhas dos olhos) -->
+    <circle cx="150" cy="128" r="50" fill="#5cb52e"/>
+    <circle cx="250" cy="128" r="50" fill="#5cb52e"/>
+
+    <!-- manchas flat (sem blur, so formas planas) -->
+    <g opacity="0.35" fill="#2f7a16">
+      <ellipse cx="140" cy="170" rx="14" ry="9" transform="rotate(-12 140 170)"/>
+      <ellipse cx="260" cy="170" rx="14" ry="9" transform="rotate(12 260 170)"/>
+      <ellipse cx="200" cy="140" rx="10" ry="7"/>
+    </g>
+
+    <!-- barriga clara, mais estreita -->
+    <ellipse cx="200" cy="268" rx="56" ry="70" fill="#fdf7d9"/>
+    <g opacity="0.45" fill="#c9a45c">
+      <ellipse cx="180" cy="240" rx="5" ry="3.5"/>
+      <ellipse cx="220" cy="240" rx="5" ry="3.5"/>
+      <ellipse cx="200" cy="268" rx="5" ry="3.5"/>
+      <ellipse cx="188" cy="296" rx="5" ry="3.5"/>
+      <ellipse cx="212" cy="296" rx="5" ry="3.5"/>
+    </g>
+
+    <!-- pes dianteiros, centrais -->
+    <g>
+      <ellipse cx="158" cy="322" rx="24" ry="16" fill="#5cb52e"/>
+      <circle cx="142" cy="332" r="8" fill="#579c2c"/>
+      <circle cx="158" cy="336" r="8" fill="#579c2c"/>
+      <circle cx="174" cy="332" r="8" fill="#579c2c"/>
+    </g>
+    <g>
+      <ellipse cx="242" cy="322" rx="24" ry="16" fill="#5cb52e"/>
+      <circle cx="226" cy="332" r="8" fill="#579c2c"/>
+      <circle cx="242" cy="336" r="8" fill="#579c2c"/>
+      <circle cx="258" cy="332" r="8" fill="#579c2c"/>
+    </g>
+
+    <!-- narinas -->
+    <ellipse cx="190" cy="118" rx="3" ry="4" fill="#1c3312"/>
+    <ellipse cx="210" cy="118" rx="3" ry="4" fill="#1c3312"/>
+
+    <!-- boca sorridente, flat -->
+    <path d="M 148 148 Q 200 182 252 148 Q 200 168 148 148 Z" fill="#7a1f2b"/>
+    <path d="M 148 148 Q 200 172 252 148" fill="none" stroke="#274a13" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+
+    <!-- olhos grandes, flat (sem aneis em gradiente) -->
+    <g id="olhoEsqFlat">
+      <circle cx="150" cy="104" r="38" fill="#ffffff"/>
+      <circle cx="150" cy="104" r="38" fill="none" stroke="#8ea52a" stroke-width="3" opacity="0.5"/>
+      <circle cx="150" cy="104" r="26" fill="#e8912c"/>
+      <circle cx="150" cy="104" r="13" fill="#211208"/>
+      <circle cx="141" cy="94" r="7" fill="#ffffff"/>
+    </g>
+    <g id="olhoDirFlat">
+      <circle cx="250" cy="104" r="38" fill="#ffffff"/>
+      <circle cx="250" cy="104" r="38" fill="none" stroke="#8ea52a" stroke-width="3" opacity="0.5"/>
+      <circle cx="250" cy="104" r="26" fill="#e8912c"/>
+      <circle cx="250" cy="104" r="13" fill="#211208"/>
+      <circle cx="241" cy="94" r="7" fill="#ffffff"/>
+    </g>
+  </g>
+</svg>

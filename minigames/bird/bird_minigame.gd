@@ -48,7 +48,7 @@ func _draw() -> void:
 func _build_world() -> void:
     hud = HUDScene.instantiate()
     add_child(hud)
-    hud.configure("Fase 2 - Passaro Logico", "↑/↓ ou W/S mudam a passagem | 1, 2 e 3 escolhem diretamente")
+    hud.configure("Fase 2 - Passaro Logico", "↑/↓ ou W/S mudam a passagem | mova o mouse para escolher | 1, 2 e 3 escolhem diretamente")
     hud.menu_requested.connect(_on_menu_requested)
 
     bird = BirdPlayer.new()
@@ -93,6 +93,26 @@ func _unhandled_key_input(event) -> void:
     elif _key_matches(event, KEY_3):
         selected_lane = 2
         _apply_lane()
+
+func _unhandled_input(event: InputEvent) -> void:
+    if locked or gate == null:
+        return
+    if event is InputEventMouseMotion:
+        var lane := _closest_lane_to(get_global_mouse_position().y)
+        if lane != selected_lane:
+            selected_lane = lane
+            _apply_lane()
+
+func _closest_lane_to(mouse_y: float) -> int:
+    var lanes: Array = BirdPlayer.LANE_Y
+    var best_index := 0
+    var best_distance := INF
+    for i in range(lanes.size()):
+        var distance: float = abs(mouse_y - lanes[i])
+        if distance < best_distance:
+            best_distance = distance
+            best_index = i
+    return best_index
 
 func _key_matches(event, key_value: int) -> bool:
     return event.keycode == key_value or event.physical_keycode == key_value

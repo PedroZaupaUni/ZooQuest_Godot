@@ -1,54 +1,50 @@
 # Contribuindo com o ZooQuest
 
-## Regra principal
+## Branches canonicas
 
-`main` e a baseline estavel. Ninguem trabalha diretamente nela.
+- `main`: baseline estavel/publicavel. Recebe somente Pull Request de `develop`.
+- `develop`: branch de integracao. Recebe somente Pull Requests de branches de trabalho.
 
-Fluxo obrigatorio:
+## Fluxo obrigatorio
 
-1. Atualize `main`.
-2. Crie uma branch curta (`feature/...`, `fix/...`, `docs/...`, `test/...`, `chore/...`).
-3. Implemente uma mudanca de escopo pequeno.
+1. Atualize `develop`.
+2. Crie `feature/*`, `fix/*`, `chore/*`, `docs/*`, `test/*` ou `hotfix/*`.
+3. Nao desenvolva diretamente em `develop` ou `main`.
 4. Rode `scripts/pre_pr_check.sh`.
-5. Faça push da branch.
-6. Abra Pull Request usando o template.
-7. Aguarde CI e review.
-8. Resolva todas as conversas.
-9. Merge somente por **Squash**.
+5. Abra PR para `develop`.
+6. Aguarde `branch-policy`, `repository-audit` e `godot-tests`.
+7. Resolva todas as threads abertas.
+8. Review humano e opcional, mas recomendado para mudancas relevantes.
+9. Use Squash para entrar em `develop`.
+10. Releases usam PR `develop -> main` e Merge Commit.
 
 ## Politica de Pull Request
 
-- 1 aprovacao obrigatoria.
-- O ultimo push precisa ser aprovado por outra pessoa.
-- Aprovacoes antigas sao descartadas quando novos commits reviewable sao enviados.
-- Todas as conversas precisam estar resolvidas.
-- `repository-audit` e `godot-tests` precisam estar verdes.
-- Force push e exclusao de `main` sao bloqueados.
-- `main` deve manter historico linear.
-- CODEOWNERS solicita automaticamente o lead tecnico.
+Pull Request continua obrigatorio.
 
-## Mudancas de gameplay
+Aprovacao humana nao e requisito tecnico obrigatorio.
+O mantenedor responsavel pode mergear o proprio PR depois que todos os gates
+automaticos obrigatorios estiverem verdes.
 
-PRs de gameplay devem testar:
+Reviews de outros integrantes continuam permitidos e recomendados.
 
-- caminho de acerto;
-- caminho de erro/retry;
-- entrada e saida da fase;
-- navegacao para a proxima etapa;
-- ausencia de erros no Debugger.
+Force push e exclusao de `develop` e `main` permanecem bloqueados.
 
-Mudancas visuais devem incluir print ou video curto no PR.
+## Gates automaticos
 
-## Arquivos proibidos no Git
+- `branch-policy`
+- `repository-audit`
+- `godot-tests`
 
-Nao versionar:
+## Genealogia
 
-- `.godot/`;
-- logs de runtime;
-- `validation/FIX1_<timestamp>/`;
-- arquivos temporarios;
-- builds locais nao solicitados.
+`develop` usa historico linear e checks strict.
 
-## Ownership
+`main` usa merge commit de release e
+`strict_required_status_checks_policy=false`, evitando merges artificiais
+`main -> develop`.
 
-Enquanto os demais handles ainda nao estiverem documentados, `@PedroZaupaUni` e solicitado como CODEOWNER geral. Isso nao substitui a aprovacao obrigatoria de outra pessoa quando Pedro for o autor do ultimo push.
+## Arquivos proibidos
+
+Nao versionar `.godot/`, logs, caches Python, temporarios,
+patches operacionais ou builds locais nao solicitados.

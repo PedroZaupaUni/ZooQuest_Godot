@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 260" width="460" height="260">
+  <!-- Minhoca, flat design, perfil lateral (mesma familia de cor da versao frontal, mais esguia) -->
+
+  <ellipse cx="240" cy="228" rx="170" ry="13" fill="#3a1420" opacity="0.16"/>
+
+  <g id="grupoMinhocaLateral">
+    <!-- pontinhos de apoio (pes minusculos, estilo lagarta) -->
+    <ellipse cx="118" cy="214" rx="9" ry="6" fill="#a63a52"/>
+    <ellipse cx="255" cy="212" rx="9" ry="6" fill="#a63a52"/>
+
+    <!-- segmentos do corpo em arco (tipo lagarta medidora), mais finos que a versao frontal -->
+    <ellipse cx="118" cy="188" rx="40" ry="28" fill="#e8607f"/>
+    <ellipse cx="185" cy="162" rx="44" ry="32" fill="#df4f6e"/>
+    <ellipse cx="255" cy="180" rx="42" ry="34" fill="#e8607f"/>
+
+    <!-- linhas de dobra entre segmentos (flat, sem blur) -->
+    <path d="M 148 170 C 154 182 154 194 148 204" stroke="#a63a52" stroke-width="3" fill="none" opacity="0.5"/>
+    <path d="M 220 156 C 228 168 228 182 220 194" stroke="#a63a52" stroke-width="3" fill="none" opacity="0.5"/>
+
+    <!-- cabeca, virada para a direita -->
+    <ellipse cx="345" cy="158" rx="52" ry="46" fill="#ef7a95"/>
+
+    <!-- antena -->
+    <path d="M 336 118 C 330 100 336 86 350 78" stroke="#c94a68" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="350" cy="77" r="4.5" fill="#df6a83"/>
+
+    <!-- olho (perfil, um so visivel) -->
+    <circle cx="362" cy="148" r="15" fill="#fffdf7"/>
+    <circle cx="366" cy="150" r="8.5" fill="#3a2010"/>
+    <circle cx="363" cy="145" r="2.6" fill="#ffffff"/>
+
+    <!-- sorriso -->
+    <path d="M 335 182 Q 357 194 377 180" fill="none" stroke="#8c2f45" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+  </g>
+</svg>

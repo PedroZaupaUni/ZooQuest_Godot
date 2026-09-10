@@ -64,6 +64,8 @@ required = [
     ".github/pull_request_template.md",
     ".github/CODEOWNERS",
     ".github/rulesets/main-protection.json",
+    ".github/rulesets/develop-protection.json",
+    "scripts/validate_branch_policy.sh",
 ]
 for item in required:
     check((ROOT / item).is_file(), f"arquivo obrigatorio ausente: {item}")
@@ -94,6 +96,40 @@ check("sha256sum -c" in workflow, "CI nao verifica SHA-256 do binario Godot")
 check("Godot_v4.7.2-stable_linux.x86_64.zip" in workflow, "CI nao fixa artefato Godot 4.7.2")
 old_main_kill = 'timeout 8s "$GODOT" --headless --path . --log-file godot-main.log'
 check(old_main_kill not in workflow, "CI ainda mata a Main por timeout em vez de teardown limpo")
+
+# Git flow governance contracts.
+check(workflow.count("branches: [main, develop]") >= 2, "CI nao cobre pull_request/push de main e develop")
+check("branch-policy" in workflow, "CI sem job branch-policy")
+check("validate_branch_policy.sh" in workflow, "CI nao executa politica de branches")
+branch_policy = (ROOT / "scripts/validate_branch_policy.sh").read_text(encoding="utf-8")
+check("HEAD_REF" in branch_policy and "BASE_REF" in branch_policy, "branch-policy sem refs de PR")
+check("base=main" in branch_policy and "expected=develop" in branch_policy, "branch-policy sem regra main <- develop")
+check("base=develop" in branch_policy and "feature|fix|chore|docs|test|hotfix" in branch_policy, "branch-policy sem regra branches -> develop")
+
+for ruleset_path, expected_ref, expected_method, expected_strict in (
+    (".github/rulesets/main-protection.json", "~DEFAULT_BRANCH", "merge", False),
+    (".github/rulesets/develop-protection.json", "refs/heads/develop", "squash", True),
+):
+    try:
+        ruleset = json.loads((ROOT / ruleset_path).read_text(encoding="utf-8"))
+        includes = ruleset.get("conditions", {}).get("ref_name", {}).get("include", [])
+        check(expected_ref in includes, f"ruleset {ruleset_path} nao protege {expected_ref}")
+        contexts = []
+        pull_methods = []
+        strict_value = None
+        for rule in ruleset.get("rules", []):
+            if rule.get("type") == "required_status_checks":
+                params = rule.get("parameters", {})
+                contexts = [item.get("context") for item in params.get("required_status_checks", [])]
+                strict_value = params.get("strict_required_status_checks_policy")
+            if rule.get("type") == "pull_request":
+                pull_methods = rule.get("parameters", {}).get("allowed_merge_methods", [])
+        for context in ("branch-policy", "repository-audit", "godot-tests"):
+            check(context in contexts, f"ruleset {ruleset_path} sem check {context}")
+        check(expected_method in pull_methods and len(pull_methods) == 1, f"ruleset {ruleset_path} metodo de merge incorreto")
+        check(strict_value is expected_strict, f"ruleset {ruleset_path} strict policy incorreta")
+    except Exception as exc:
+        check(False, f"ruleset invalido {ruleset_path}: {exc}")
 
 # Contratos de lifecycle dos testes e do AudioManager.
 audio_text = (ROOT / "core/audio_manager.gd").read_text(encoding="utf-8")

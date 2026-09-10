@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://c3l60xh73a42t"]
 
-[ext_resource type="Script" path="res://minigames/bird/bird_minigame.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bsbkh31ul46w3" path="res://minigames/bird/bird_minigame.gd" id="1_script"]
 
-[node name="BirdMinigame" type="Node2D"]
+[node name="BirdMinigame" type="Node2D" unique_id=317170904]
 script = ExtResource("1_script")
