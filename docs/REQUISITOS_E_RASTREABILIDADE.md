@@ -1,17 +1,18 @@
 # Requisitos e rastreabilidade
 
-| Requisito | Origem documental | Implementação |
+| Requisito | Referência | Implementação |
 |---|---|---|
-| Jogo educativo 2D em Godot | Orientações UniFil; Visão | `project.godot` e todas as cenas 2D |
-| Três mini-games | Visão e GDD | `minigames/frog`, `bird`, `worm` |
-| Sapo escolhe vitórias-régias | Visão e documentação funcional | `frog_minigame.gd` + `lily_pad.gd` |
-| Pássaro escolhe caminhos | Visão e documentação funcional | `bird_minigame.gd` + `answer_gate.gd` |
-| Minhoca coleta fruta-resposta | Visão e documentação funcional | `worm_minigame.gd` + `fruit_answer.gd` |
-| Pergunta, escolha, feedback, progresso ou reinício | GDD e documentação de gameplay | lógica de submissão nas três fases |
-| Pontuação | GDD | `core/game_state.gd` e `ui/hud.gd` |
-| Fluxo contínuo | Correção do grupo e documentação consolidada | `data/story_flow.json` + `core/main.gd` |
-| Retorno à forma humana após cada fase | Correção do grupo | três etapas `return_human_*` no fluxo |
-| Navegação completa | Atividade de Desenvolvimento | menu -> narrativa -> três fases -> final -> replay/menu |
-| Rejogabilidade | Orientações UniFil | botão Jogar Novamente e reinício do estado |
-| Sem API, banco ou backend | Orientações UniFil e Visão | todos os dados e recursos são locais |
-| Interface clara e infantil | Visão e GDD | HUD, instruções e feedback visual |
+| Jogo educativo 2D em Godot | `docs/referencias/ORIENTACOES_UNIFIL_JOGOS.pdf`; `docs/referencias/VISAO_ZOOQUEST.pdf` | `project.godot`, cenas e scripts 2D |
+| Três mini-games | `docs/referencias/VISAO_ZOOQUEST.pdf`; `docs/referencias/GDD_ZOOQUEST.pdf` | `minigames/frog`, `minigames/bird`, `minigames/worm` |
+| Sapo escolhe vitórias-régias | `docs/referencias/GDD_ZOOQUEST.pdf`; `docs/referencias/DOCUMENTACAO_GAMEPLAY_E_FLUXOS.docx` | `frog_minigame.gd`, `frog_player.gd`, `lily_pad.gd` |
+| Pássaro escolhe caminhos | `docs/referencias/GDD_ZOOQUEST.pdf`; `docs/referencias/DOCUMENTACAO_GAMEPLAY_E_FLUXOS.docx` | `bird_minigame.gd`, `bird_player.gd`, `answer_gate.gd` |
+| Minhoca coleta fruta-resposta | `docs/referencias/GDD_ZOOQUEST.pdf`; `docs/referencias/DOCUMENTACAO_GAMEPLAY_E_FLUXOS.docx` | `worm_minigame.gd`, `worm_player.gd`, `fruit_answer.gd` |
+| Pergunta, escolha, validação, feedback e progresso | `docs/referencias/DOCUMENTACAO_GAMEPLAY_E_FLUXOS.docx` | lógica de submissão das três fases |
+| Pontuação global | `docs/referencias/GDD_ZOOQUEST.pdf` | `core/game_state.gd`, `ui/hud.gd` |
+| Fluxo contínuo | `docs/referencias/DOCUMENTACAO_GAMEPLAY_E_FLUXOS.docx` | `data/story_flow.json`, `core/main.gd` |
+| Retorno à forma humana após cada fase | `docs/referencias/DOCUMENTACAO_GAMEPLAY_E_FLUXOS.docx` | etapas `return_human_*` de `data/story_flow.json` |
+| Navegação completa | `docs/referencias/ORIENTACOES_UNIFIL_JOGOS.pdf`; documentação funcional | menu, narrativa, fases, encerramento e replay |
+| Rejogabilidade | `docs/referencias/ORIENTACOES_UNIFIL_JOGOS.pdf` | tela final e reinicialização de `GameState` |
+| Execução local, sem backend | `docs/referencias/ORIENTACOES_UNIFIL_JOGOS.pdf`; `docs/referencias/VISAO_ZOOQUEST.pdf` | dados e recursos locais |
+| Interface adequada ao público infantil | `docs/referencias/VISAO_ZOOQUEST.pdf`; `docs/referencias/GDD_ZOOQUEST.pdf` | menu, HUD, instruções e feedback visual |
+| Interação por mouse em fases compatíveis | evolução funcional registrada na PR #2 | pássaro, minhoca e componentes de seleção associados |

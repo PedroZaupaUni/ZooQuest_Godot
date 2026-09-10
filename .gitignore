@@ -1,30 +1,28 @@
 # Godot
 .godot/
 .import/
+
+# Exportações locais
+build/
+exports/
 export.cfg
 export_presets.cfg
 
-# Python local validation cache
+# Python
 __pycache__/
 *.pyc
 
-# Editor / OS
+# Editores e sistema operacional
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
 *~
 
-# Generated local logs
-validation/local_*.json
-validation/local_*.txt
-
-# Exported builds (not part of this development delivery)
-build/
-exports/
-validation/FIX1_*/
-validation/GOVERNANCE_*/
+# Logs e temporários
 *.log
 *.tmp
 *.swp
-/ZooQuest_FIX1_RUNTIME_HARDENING.patch
+
+# Generated local validation output
+/validation/

@@ -1,43 +1,30 @@
-## Objetivo
+## Resumo da alteração
 
-Descreva em 2-5 linhas o que este PR muda e por que a mudanca e necessaria.
+<!-- Explique objetivamente o que mudou e o motivo da alteração. -->
 
-## Fluxo da branch
+## Tipo de mudança
 
-- Trabalho normal: `feature/* | fix/* | chore/* | docs/* | test/* | hotfix/* -> develop`.
-- Release: `develop -> main`.
+- [ ] Funcionalidade ou gameplay
+- [ ] Correção
+- [ ] Interface ou recurso visual
+- [ ] Dados ou conteúdo educacional
+- [ ] Testes
+- [ ] Documentação
+- [ ] CI, automação ou manutenção
 
-## Escopo
+## Validação realizada
 
-- [ ] Gameplay / mini-game
-- [ ] Core / fluxo / estado
-- [ ] UI / narrativa
-- [ ] Dados / perguntas
-- [ ] Testes / QA
-- [ ] Documentacao
-- [ ] CI / governanca
+- [ ] `./scripts/pre_pr_check.sh` executado quando aplicável
+- [ ] Caminho principal afetado foi testado
+- [ ] Caminho de erro ou nova tentativa foi testado quando aplicável
+- [ ] Teclado e mouse foram testados quando a alteração afeta controles
+- [ ] Nenhum cache, log, temporário ou build local foi incluído
+- [ ] Documentação foi atualizada quando o comportamento mudou
 
-## Como validar
+## Evidências
 
-1.
-2.
-3.
+<!-- Para mudanças visuais ou de gameplay, anexe captura ou vídeo curto. Para correções técnicas, inclua somente o trecho de log necessário para a revisão. -->
 
-## Evidencias
+## Risco e reversão
 
-- Prints/video quando houver mudanca visual ou de gameplay:
-- Logs/resultado dos testes quando aplicavel:
-
-## Checklist obrigatorio
-
-- [ ] Minha branch nasceu da `develop` atualizada, ou este PR e `develop -> main`.
-- [ ] Nao fiz push direto em `develop` ou `main`.
-- [ ] `scripts/pre_pr_check.sh` passa quando aplicavel.
-- [ ] Testei caminho de sucesso e erro/retry afetados pela mudanca.
-- [ ] Nao adicionei `.godot/`, logs, caches, temporarios ou artefatos de execucao.
-- [ ] Atualizei documentacao/dados quando o comportamento mudou.
-- [ ] Revisei o diff antes do merge ou de solicitar review opcional.
-
-## Risco e rollback
-
-Explique brevemente o que pode quebrar e como reverter esta mudanca.
+<!-- Informe o principal risco da alteração e como ela pode ser revertida, quando houver risco relevante. -->
