@@ -1,10 +1,15 @@
-# ZooQuest CODEOWNERS
-# Lead tecnico / integracao. Adicione os demais GitHub handles por area quando definidos.
+# Responsável geral pelo repositório
 * @PedroZaupaUni
 
-# Areas de governanca e nucleo ficam explicitamente sob revisao do lead.
+# Núcleo, automação e documentação
 /.github/ @PedroZaupaUni
 /core/ @PedroZaupaUni
 /data/ @PedroZaupaUni
+/docs/ @PedroZaupaUni
 /scripts/ @PedroZaupaUni
 /tests/ @PedroZaupaUni
+
+# Gameplay e recursos com contribuição compartilhada
+/characters/ @PedroZaupaUni @danielyassuo
+/minigames/ @PedroZaupaUni @danielyassuo
+/assets/icons/ @PedroZaupaUni @danielyassuo

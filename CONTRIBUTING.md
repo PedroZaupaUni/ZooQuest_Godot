@@ -1,50 +1,94 @@
 # Contribuindo com o ZooQuest
 
-## Branches canonicas
+## Branches
 
-- `main`: baseline estavel/publicavel. Recebe somente Pull Request de `develop`.
-- `develop`: branch de integracao. Recebe somente Pull Requests de branches de trabalho.
+- `develop`: branch de integração do time.
+- `main`: versão estável e publicável.
 
-## Fluxo obrigatorio
+O desenvolvimento não deve ser feito diretamente em nenhuma das duas branches.
 
-1. Atualize `develop`.
-2. Crie `feature/*`, `fix/*`, `chore/*`, `docs/*`, `test/*` ou `hotfix/*`.
-3. Nao desenvolva diretamente em `develop` ou `main`.
-4. Rode `scripts/pre_pr_check.sh`.
-5. Abra PR para `develop`.
-6. Aguarde `branch-policy`, `repository-audit` e `godot-tests`.
-7. Resolva todas as threads abertas.
-8. Review humano e opcional, mas recomendado para mudancas relevantes.
-9. Use Squash para entrar em `develop`.
-10. Releases usam PR `develop -> main` e Merge Commit.
+## Fluxo de trabalho
 
-## Politica de Pull Request
+Atualize a `develop` antes de iniciar uma tarefa:
 
-Pull Request continua obrigatorio.
+```bash
+git switch develop
+git pull --ff-only origin develop
+```
 
-Aprovacao humana nao e requisito tecnico obrigatorio.
-O mantenedor responsavel pode mergear o proprio PR depois que todos os gates
-automaticos obrigatorios estiverem verdes.
+Crie uma branch curta e descritiva:
 
-Reviews de outros integrantes continuam permitidos e recomendados.
+```bash
+git switch -c feature/nome-da-funcionalidade
+```
 
-Force push e exclusao de `develop` e `main` permanecem bloqueados.
+Prefixos aceitos:
 
-## Gates automaticos
+- `feature/`: nova funcionalidade;
+- `fix/`: correção de defeito;
+- `chore/`: manutenção técnica;
+- `docs/`: documentação;
+- `test/`: testes;
+- `hotfix/`: correção urgente preparada para o fluxo normal de integração.
 
-- `branch-policy`
-- `repository-audit`
-- `godot-tests`
+Antes do push, execute:
 
-## Genealogia
+```bash
+./scripts/pre_pr_check.sh
+```
 
-`develop` usa historico linear e checks strict.
+Depois publique a branch e abra o Pull Request para `develop`:
 
-`main` usa merge commit de release e
-`strict_required_status_checks_policy=false`, evitando merges artificiais
-`main -> develop`.
+```bash
+git push -u origin HEAD
+gh pr create --base develop --fill
+```
 
-## Arquivos proibidos
+## Integração
 
-Nao versionar `.godot/`, logs, caches Python, temporarios,
-patches operacionais ou builds locais nao solicitados.
+Pull Requests para `develop` devem passar por:
+
+- `branch-policy`;
+- `repository-audit`;
+- `godot-tests`;
+- resolução de todas as conversas de review abertas.
+
+O merge em `develop` é feito por **Squash**.
+
+Quando a `develop` estiver pronta para publicação, o release é feito por Pull Request `develop -> main`. O merge em `main` é feito por **Merge Commit**, preservando a genealogia do Git flow.
+
+## Review
+
+Review humano é opcional. O mantenedor pode concluir o próprio Pull Request depois que os checks obrigatórios estiverem verdes e as conversas abertas estiverem resolvidas.
+
+Para alterações relevantes de gameplay, arquitetura ou dados educacionais, revisão por outro integrante é recomendada.
+
+## Commits
+
+Prefira mensagens curtas e objetivas no formato:
+
+```text
+feat: adiciona ...
+fix: corrige ...
+docs: atualiza ...
+test: cobre ...
+chore: ajusta ...
+```
+
+## Requisitos para alterações de gameplay
+
+Valide, quando aplicável:
+
+- caminho de acerto;
+- caminho de erro e nova tentativa;
+- entrada e saída da fase;
+- navegação para a próxima etapa;
+- teclado e mouse;
+- pontuação e reinício;
+- ausência de erros no Debugger.
+
+Mudanças visuais devem ser acompanhadas de captura de tela ou vídeo curto no Pull Request quando isso ajudar a revisão.
+
+## Arquivos locais
+
+Não versionar caches do Godot ou Python, logs, temporários, configurações pessoais de IDE ou builds locais não destinados ao repositório.

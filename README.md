@@ -1,85 +1,117 @@
 # ZooQuest: A Jornada do Aprendizado
 
-Versao funcional completa de desenvolvimento do jogo educativo 2D produzido no Godot.
+[![ZooQuest CI](https://github.com/PedroZaupaUni/ZooQuest_Godot/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/PedroZaupaUni/ZooQuest_Godot/actions/workflows/ci.yml)
 
-## Estado desta entrega
+ZooQuest é um jogo educativo 2D desenvolvido em **Godot 4.7.2**. A experiência acompanha uma excursão a um zoológico e combina narrativa, transformação de personagem e três mini-games voltados a matemática, raciocínio lógico e tomada de decisão.
 
-`VERSAO_FUNCIONAL_LOCAL - 3 MINI-GAMES - FLUXO COMPLETO`
+O projeto é acadêmico, funciona localmente e não depende de API, banco de dados, autenticação ou backend.
 
-O projeto implementa o fluxo jogavel do inicio ao fim:
+## Funcionalidades
 
-1. menu inicial;
-2. introducao narrativa;
-3. transformacao em sapo;
-4. mini-game Sapo Matematico;
-5. retorno a forma humana;
-6. transformacao em passaro;
-7. mini-game Passaro Logico;
-8. retorno a forma humana;
-9. transformacao em minhoca;
-10. mini-game Minhoca das Escolhas;
-11. retorno a forma humana;
-12. encerramento, pontuacao e opcao de jogar novamente.
+- jornada contínua do menu ao encerramento;
+- três mini-games: Sapo Matemático, Pássaro Lógico e Minhoca das Escolhas;
+- nove desafios educativos, três por fase;
+- pontuação de 10 pontos por acerto, com máximo de 90 pontos;
+- feedback de acerto e erro, com nova tentativa após resposta incorreta;
+- retorno à forma humana entre as fases;
+- controles por teclado e interações por mouse nas mecânicas compatíveis;
+- tela final com pontuação, reinício da jornada e retorno ao menu;
+- testes automatizados de inicialização, fluxo completo e encerramento limpo.
 
-## Abrir e executar
+## Fluxo do jogo
 
-1. Instale Godot 4.x Standard (o projeto foi preparado para Godot 4.7.2 e usa apenas APIs estaveis da familia 4.x).
-2. No Gerenciador de Projetos, clique em **Importar**.
-3. Selecione este arquivo `project.godot`.
-4. Abra o projeto e pressione **F6/F5**; para a jornada completa, use **F5**.
-
-Nao e necessario instalar plugin, API, banco de dados ou dependencia externa.
+```text
+Menu
+  -> Introdução
+  -> Transformação em sapo
+  -> Sapo Matemático
+  -> Retorno humano
+  -> Transformação em pássaro
+  -> Pássaro Lógico
+  -> Retorno humano
+  -> Transformação em minhoca
+  -> Minhoca das Escolhas
+  -> Retorno humano
+  -> Encerramento
+  -> Jogar novamente ou voltar ao menu
+```
 
 ## Controles
 
-### Geral
-- `ENTER` ou `ESPACO`: continuar mensagens e transformacoes.
-- `MENU`: retorna ao menu principal.
-- `1`, `2`, `3`: atalho de escolha nas fases.
+| Contexto | Controles |
+|---|---|
+| Narrativa e transformações | `Enter` ou `Espaço` para continuar |
+| Sapo Matemático | `A/D` ou setas para selecionar; `Espaço` para saltar; clique na vitória-régia |
+| Pássaro Lógico | `W/S` ou setas para mudar de faixa; mouse para selecionar uma faixa |
+| Minhoca das Escolhas | `WASD` ou setas para mover; contato ou clique na fruta-resposta |
 
-### Sapo Matematico
-- `ESQUERDA/DIREITA` ou `A/D`: selecionar vitoria-regia.
-- `ESPACO`: pular para a alternativa selecionada.
-- Tambem e possivel clicar em uma vitoria-regia.
+## Executar localmente
 
-### Passaro Logico
-- `CIMA/BAIXO` ou `W/S`: mudar de passagem.
-- Escolha antes que a barreira alcance o passaro.
+1. Instale o Godot 4.7.2 Standard.
+2. No Gerenciador de Projetos do Godot, selecione **Importar**.
+3. Escolha o arquivo `project.godot` da raiz do repositório.
+4. Pressione **F5** para iniciar a jornada completa.
 
-### Minhoca das Escolhas
-- Setas ou `WASD`: movimentar.
-- Encoste ou clique na fruta-resposta correta.
+Não há dependências adicionais de aplicação.
 
-## Regras implementadas
-
-- 3 perguntas em cada fase, totalizando 9 desafios.
-- Cada acerto vale 10 pontos; pontuacao maxima: 90.
-- Resposta incorreta nao remove pontos: registra a tentativa, explica a resposta e repete o desafio.
-- A jornada volta a forma humana depois de cada mini-game.
-- O jogo pode ser reiniciado a partir da tela final.
-
-## Estrutura
+## Estrutura do repositório
 
 ```text
-core/           fluxo global, estado e audio
-ui/             menu, narrativa, transformacoes, HUD e encerramento
-characters/     controladores visuais dos tres animais
-minigames/      sapo, passaro e minhoca
-data/           perguntas e fluxo narrativo em JSON
-assets/         sons e recursos locais
-docs/           fontes, diagramas, planejamento e relatorio
-scripts/        validador estatico do repositorio
-tests/manual/   roteiro de testes funcionais no Godot
+assets/        recursos de áudio e ícones
+characters/    controladores dos personagens jogáveis
+core/          fluxo global, estado e áudio
+data/          perguntas e sequência narrativa
+docs/          documentação técnica, acadêmica e materiais de referência
+minigames/     implementação das três fases
+scripts/       validações e utilitários do projeto
+shared/        componentes reutilizáveis
+tests/         testes automatizados e roteiro manual
+ui/            menu, HUD, narrativa, transformações e encerramento
 ```
 
-## Validacao local sem abrir o editor
+## Qualidade e testes
+
+Para executar as validações estáticas:
 
 ```bash
-python3 scripts/validate_repository.py
+./scripts/run_validation.sh
 ```
 
-A validacao confirma estrutura, referencias `res://`, JSON, perguntas, fluxo, cenas, scripts e WAVs. A validacao funcional final deve ser executada no editor Godot usando o roteiro em `tests/manual/ROTEIRO_TESTE_FUNCIONAL.md`.
+Para executar os testes no Godot:
 
-## Documentacao
+```bash
+GODOT_BIN=/caminho/para/Godot_v4.7.2-stable_linux.x86_64 ./scripts/run_godot_smoke.sh
+```
 
-Comece por `CONTINUE_AQUI.md`. Os documentos originais utilizados na reconstrucao estao preservados em `docs/fontes/`.
+A integração contínua executa automaticamente:
+
+- política de branches (`branch-policy`);
+- auditoria do repositório (`repository-audit`);
+- importação no Godot 4.7.2;
+- smoke test;
+- regressão do fluxo completo;
+- teste de inicialização da cena principal;
+- auditoria de erros e vazamentos reportados pelo motor.
+
+Detalhes: [Qualidade e testes](docs/QUALIDADE_E_TESTES.md).
+
+## Desenvolvimento
+
+O fluxo de contribuição é:
+
+```text
+feature/* | fix/* | chore/* | docs/* | test/* | hotfix/*
+                         -> develop
+                         -> main
+```
+
+As regras para branches, Pull Requests e validação estão em [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Documentação
+
+A documentação do projeto está organizada em [docs/README.md](docs/README.md). Os documentos acadêmicos originais e modelos editáveis estão preservados em `docs/referencias/`.
+
+## Links
+
+- Repositório: https://github.com/PedroZaupaUni/ZooQuest_Godot
+- Portfólio: https://zooquest-unifil-portfolio.netlify.app
