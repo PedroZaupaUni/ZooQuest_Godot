@@ -58,9 +58,7 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
-          python3 scripts/validate_repository.py
-          python3 scripts/validate_runtime_patterns.py
-          python3 scripts/audit_repository.py
+          ./scripts/run_validation.sh
 
       - name: Git whitespace audit
         if: github.event_name == 'pull_request'

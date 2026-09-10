@@ -1,6 +1,8 @@
-# Arquitetura do jogo
+# Arquitetura do ZooQuest
 
-## Visao geral
+## Visão geral
+
+A aplicação utiliza uma cena principal persistente e substitui apenas a etapa ativa da jornada.
 
 ```text
 Main
@@ -14,28 +16,57 @@ Main
     └── EndingScreen
 ```
 
-`Main` permanece ativo e substitui apenas a etapa dentro de `StageHost`. Para o jogador, a experiencia e uma jornada continua; tecnicamente, cada responsabilidade fica isolada em uma cena.
+`core/main.gd` coordena a sequência definida em `data/story_flow.json`. As cenas de gameplay não escolhem diretamente a próxima etapa; elas comunicam conclusão por sinais e o controlador global decide a transição.
 
 ## Autoloads
 
-- `GameState`: pontuacao e estatisticas globais.
-- `QuestionBank`: carrega perguntas de `data/questions.json`.
-- `FlowRepository`: carrega a sequencia de `data/story_flow.json`.
-- `AudioManager`: reproduz efeitos sonoros locais.
+| Autoload | Responsabilidade |
+|---|---|
+| `GameState` | Pontuação, acertos, erros e fase atual |
+| `QuestionBank` | Leitura e acesso às perguntas de `data/questions.json` |
+| `FlowRepository` | Leitura da sequência de `data/story_flow.json` |
+| `AudioManager` | Reprodução e gerenciamento dos efeitos sonoros |
 
-## Contrato dos mini-games
+## Organização por domínio
 
-Cada mini-game emite:
+- `core/`: coordenação global e estado compartilhado;
+- `data/`: conteúdo educativo e sequência narrativa;
+- `ui/`: telas gerais, HUD e componentes de navegação;
+- `characters/`: movimento e representação dos personagens;
+- `minigames/`: regras específicas de cada fase;
+- `shared/`: componentes reutilizáveis;
+- `tests/`: testes automatizados e roteiro de validação manual.
 
-- `completed`: quando todas as tres perguntas foram concluidas;
-- `menu_requested`: quando o jogador solicita retorno ao menu.
+## Contrato das fases
 
-O mini-game nao decide qual etapa vem depois. Essa decisao pertence a `core/main.gd`.
+Cada mini-game expõe os sinais usados pelo controlador principal:
 
-## Separacao de responsabilidades
+```gdscript
+signal completed
+signal menu_requested
+```
 
-- Conteudo educativo e fluxo narrativo ficam em JSON.
-- UI geral fica em `ui/`.
-- Movimento/desenho dos animais fica em `characters/`.
-- Regras especificas de cada fase ficam em `minigames/`.
-- Estado global fica em `core/game_state.gd`.
+`completed` informa que as três perguntas da fase foram concluídas. `menu_requested` devolve o controle ao menu principal.
+
+## Dados
+
+As perguntas ficam fora dos scripts em `data/questions.json`. Cada item possui identificador, categoria, dificuldade, enunciado, três alternativas, índice da resposta correta e explicação.
+
+A ordem narrativa fica em `data/story_flow.json`, que contém as transformações, retornos à forma humana, telas narrativas e fases jogáveis.
+
+## Ciclo de uma pergunta
+
+```text
+carregar pergunta
+    -> apresentar alternativas no cenário
+    -> receber escolha
+    -> validar resposta
+       -> correta: registrar pontos e avançar
+       -> incorreta: registrar tentativa, explicar e repetir
+```
+
+## Segurança de lifecycle
+
+As trocas de etapa usam conexões diferidas para evitar alteração reentrante da árvore de cenas durante callbacks de interface. Rotinas assíncronas verificam se a cena ainda pertence à `SceneTree` antes de continuar após `await`.
+
+Os testes automatizados também encerram cenas e efeitos de áudio de forma determinística para detectar vazamentos de objetos ou recursos no Godot.

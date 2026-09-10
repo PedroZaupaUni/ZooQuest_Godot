@@ -1,6 +1,0 @@
-ZOOQUEST_VALIDATION_STATUS=PASS
-CHECKS_TOTAL=92
-CHECKS_PASSED=92
-ERRORS=0
-WARNINGS=0
-REPORT=/mnt/data/zooquest_current/ZooQuest_Projeto_Completo_Godot/validation/VALIDATION_REPORT.json
