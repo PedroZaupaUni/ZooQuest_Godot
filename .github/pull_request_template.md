@@ -36,7 +36,7 @@ Descreva em 2-5 linhas o que este PR muda e por que a mudanca e necessaria.
 - [ ] Testei caminho de sucesso e erro/retry afetados pela mudanca.
 - [ ] Nao adicionei `.godot/`, logs, caches, temporarios ou artefatos de execucao.
 - [ ] Atualizei documentacao/dados quando o comportamento mudou.
-- [ ] Revisei o diff antes de solicitar review.
+- [ ] Revisei o diff antes do merge ou de solicitar review opcional.
 
 ## Risco e rollback
 

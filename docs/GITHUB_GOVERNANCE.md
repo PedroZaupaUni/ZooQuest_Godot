@@ -4,35 +4,47 @@
 
 `feature/* | fix/* | chore/* | docs/* | test/* | hotfix/* -> develop -> main`
 
-`develop` e a branch de integracao. `main` e a baseline estavel/publicavel. Nenhuma recebe desenvolvimento direto.
-
 ## Gates obrigatorios
 
 1. Pull Request.
-2. Uma aprovacao.
-3. Ultimo push aprovado por outra pessoa.
-4. Reviews antigos descartados apos novos commits.
-5. Todas as threads resolvidas.
-6. `branch-policy` verde.
-7. `repository-audit` verde.
-8. `godot-tests` verde.
-9. Squash merge em `develop`; merge commit em `main`.
-10. Sem force push ou exclusao das branches protegidas.
+2. `branch-policy`.
+3. `repository-audit`.
+4. `godot-tests`.
+5. Todas as threads abertas resolvidas.
+6. Sem force push.
+7. Sem exclusao das branches protegidas.
 
-## Branch policy
+## Review humano
 
-- PR para `main`: head exatamente `develop`.
-- PR para `develop`: head `feature/*`, `fix/*`, `chore/*`, `docs/*`, `test/*` ou `hotfix/*`.
-- PR `main -> develop` e proibido como rotina.
+Review humano e opcional.
 
-## Status checks e genealogia
+O mantenedor responsavel pode fazer merge do proprio Pull Request quando
+todos os gates automaticos obrigatorios estiverem verdes.
 
-`develop` usa status checks strict e historico linear. `main` exige os mesmos checks, mas nao exige que o head esteja estritamente atualizado com a base (`strict_required_status_checks_policy=false`). Isso e intencional: cada release gera merge commit em `main`; forcar `develop` a absorver esse merge commit antes do release seguinte criaria merges `main -> develop` e destruiria o historico linear de integracao. O workflow de `pull_request` testa o merge result antes do release.
+Essa politica evita dependencia operacional de uma segunda pessoa sem
+remover os controles tecnicos do repositorio.
+
+## Merge
+
+- branches de trabalho -> `develop`: Squash.
+- `develop` -> `main`: Merge Commit.
+
+## Status checks
+
+`develop` usa checks strict.
+
+`main` exige os mesmos checks, mas usa
+`strict_required_status_checks_policy=false` para preservar a genealogia
+do Git flow sem exigir `main -> develop`.
 
 ## CI
 
-O workflow executa em PR/push de `develop` e `main`. `repository-audit` valida contratos estaticos; `godot-tests` usa Godot 4.7.2 verificado por SHA-256 para import, smoke, fluxo completo e startup limpo; `branch-policy` valida a direcao do Git flow.
+A CI cobre `develop` e `main`.
 
-## CODEOWNERS
+Gates:
 
-`@PedroZaupaUni` permanece como CODEOWNER geral ate a equipe definir ownership por modulo. A aprovacao obrigatoria deve vir de outra pessoa quando o autor fez o ultimo push.
+- `branch-policy`;
+- `repository-audit`;
+- `godot-tests`.
+
+O runtime usa Godot 4.7.2 verificado por SHA-256.

@@ -3,7 +3,7 @@
   "state": "GOVERNED_REPOSITORY_RUNTIME_GATED",
   "godot_version": "4.7.2",
   "file_count_excluding_manifest_inventory": 151,
-  "total_bytes_excluding_manifest_inventory": 3897979,
+  "total_bytes_excluding_manifest_inventory": 3896783,
   "counts_by_extension": {
     ".asta": 1,
     ".docx": 2,
