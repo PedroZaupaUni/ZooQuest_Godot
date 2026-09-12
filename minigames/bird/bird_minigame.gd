@@ -66,6 +66,7 @@ func _present_question() -> void:
 		completed.emit()
 		return
 	var question: Dictionary = questions[question_index]
+	QuestionBank.shuffle_options(question)
 	hud.set_question(str(question["question"]), question_index + 1, questions.size())
 	gate.position = Vector2(GATE_START_X, 0)
 	gate.set_options(question["options"])
@@ -95,7 +96,7 @@ func _unhandled_key_input(event) -> void:
 		_apply_lane()
  
 func _unhandled_input(event: InputEvent) -> void:
-
+ 
 	if locked or gate == null:
 		return
 	if event is InputEventMouseMotion:
@@ -147,4 +148,3 @@ func _submit_answer(index: int) -> void:
  
 func _on_menu_requested() -> void:
 	menu_requested.emit()
- 

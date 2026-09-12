@@ -1,15 +1,15 @@
 extends Node2D
-
+ 
 signal completed
 signal menu_requested
-
+ 
 const HUDScene := preload("res://ui/hud.tscn")
 const FrogPlayer := preload("res://characters/frog/frog_player.gd")
 const LilyPad := preload("res://minigames/frog/lily_pad.gd")
-
+ 
 const START_POSITION := Vector2(640, 585)
 const PAD_POSITIONS := [Vector2(335, 410), Vector2(640, 385), Vector2(945, 410)]
-
+ 
 var hud
 var player
 var pads: Array = []
@@ -17,13 +17,13 @@ var questions: Array = []
 var question_index: int = 0
 var selected_index: int = 1
 var locked: bool = false
-
+ 
 func _ready() -> void:
 	questions = QuestionBank.get_questions("frog")
-	_build_world()
+	_build_world()	
 	_present_question()
 	queue_redraw()
-
+ 
 func _draw() -> void:
 	draw_rect(Rect2(0, 0, 1280, 720), Color(0.55, 0.85, 0.96))
 	draw_circle(Vector2(1120, 250), 58, Color(1.0, 0.88, 0.35))
@@ -34,18 +34,18 @@ func _draw() -> void:
 	draw_rect(Rect2(0, 625, 1280, 95), Color(0.34, 0.24, 0.12))
 	for x in range(35, 1260, 90):
 		draw_line(Vector2(x, 620), Vector2(x + 14, 570), Color(0.16, 0.50, 0.20), 8)
-
+ 
 func _build_world() -> void:
 	hud = HUDScene.instantiate()
 	add_child(hud)
 	hud.configure("Fase 1 - Sapo Matematico", "←/→ ou A/D escolhem | ESPACO pula | 1, 2 e 3 selecionam diretamente")
 	hud.menu_requested.connect(_on_menu_requested)
-
+ 
 	player = FrogPlayer.new()
 	player.position = START_POSITION
 	player.z_index = 5
 	add_child(player)
-
+ 
 	for i in range(3):
 		var pad = LilyPad.new()
 		pad.position = PAD_POSITIONS[i]
@@ -54,7 +54,7 @@ func _build_world() -> void:
 		pad.configure(i, str(i + 1))
 		pad.selected.connect(_on_pad_clicked)
 		pads.append(pad)
-
+ 
 func _present_question() -> void:
 	locked = false
 	hud.hide_feedback()
@@ -62,6 +62,7 @@ func _present_question() -> void:
 		completed.emit()
 		return
 	var question: Dictionary = questions[question_index]
+	QuestionBank.shuffle_options(question)
 	hud.set_question(str(question["question"]), question_index + 1, questions.size())
 	for i in range(3):
 		pads[i].configure(i, str(question["options"][i]))
@@ -69,7 +70,7 @@ func _present_question() -> void:
 	selected_index = 1
 	_update_selection()
 	player.reset_to(START_POSITION)
-
+ 
 func _unhandled_key_input(event) -> void:
 	if locked or not event.pressed or event.echo:
 		return
@@ -90,21 +91,21 @@ func _unhandled_key_input(event) -> void:
 		_submit_answer(1)
 	elif _key_matches(event, KEY_3):
 		_submit_answer(2)
-
+ 
 func _key_matches(event, key_value: int) -> bool:
 	return event.keycode == key_value or event.physical_keycode == key_value
-
+ 
 func _update_selection() -> void:
 	for i in range(pads.size()):
 		pads[i].set_highlighted(i == selected_index)
-
+ 
 func _on_pad_clicked(index: int) -> void:
 	if locked:
 		return
 	selected_index = index
 	_update_selection()
 	_submit_answer(index)
-
+ 
 func _submit_answer(index: int) -> void:
 	if locked:
 		return
@@ -130,6 +131,6 @@ func _submit_answer(index: int) -> void:
 		hud.show_feedback("Quase! " + str(question["explanation"]), false)
 		await get_tree().create_timer(1.50).timeout
 		_present_question()
-
+ 
 func _on_menu_requested() -> void:
 	menu_requested.emit()
