@@ -28,7 +28,30 @@ func get_questions(phase_id: String) -> Array:
     if not questions_by_phase.has(phase_id):
         push_error("Fase sem perguntas cadastradas: " + phase_id)
         return []
-    return questions_by_phase[phase_id].duplicate(true)
+    var questions: Array = questions_by_phase[phase_id].duplicate(true)
+    for question in questions:
+        shuffle_options(question)
+    return questions
+
+func shuffle_options(question: Dictionary) -> void:
+    var options: Array = question.get("options", [])
+    if options.size() <= 1:
+        return
+    var correct_index: int = int(question.get("correct_index", 0))
+    if correct_index < 0 or correct_index >= options.size():
+        push_error("Indice de resposta correta invalido durante embaralhamento.")
+        return
+    var order: Array = range(options.size())
+    order.shuffle()
+    var shuffled_options: Array = []
+    var new_correct_index := 0
+    for new_pos in range(order.size()):
+        var original_pos: int = order[new_pos]
+        shuffled_options.append(options[original_pos])
+        if original_pos == correct_index:
+            new_correct_index = new_pos
+    question["options"] = shuffled_options
+    question["correct_index"] = new_correct_index
 
 func is_ready_for_game() -> bool:
     return load_error.is_empty() and questions_by_phase.size() >= 3

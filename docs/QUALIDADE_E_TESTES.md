@@ -28,11 +28,12 @@ Com Godot 4.7.2 disponível:
 GODOT_BIN=/caminho/para/Godot_v4.7.2-stable_linux.x86_64 ./scripts/run_godot_smoke.sh
 ```
 
-O runner executa três cenários:
+O runner executa quatro cenários:
 
 1. **Smoke test**: carrega autoloads, scripts e cenas principais e valida o teardown.
 2. **Fluxo completo**: percorre menu, narrativa, transformações, três mini-games, encerramento, replay e retorno ao menu.
 3. **Inicialização da Main**: garante que a cena principal inicia no estado esperado e encerra sem resíduos.
+4. **Embaralhamento de alternativas**: executa repetidamente o shuffle e confirma que o conjunto de opções e a resposta correta permanecem consistentes.
 
 Os logs falham quando o Godot reporta erro de script, chamada inválida, erro de parser, vazamento de `ObjectDB` ou recurso ainda em uso.
 
@@ -52,4 +53,4 @@ A Action `actions/checkout` é fixada por SHA e o token do workflow possui somen
 
 ## Validação manual
 
-O arquivo `tests/manual/ROTEIRO_TESTE_FUNCIONAL.md` contém 30 casos para conferir comportamento visual e interação real no editor. Esse roteiro é recomendado antes de demonstrações e entregas.
+O arquivo `tests/manual/ROTEIRO_TESTE_FUNCIONAL.md` contém os casos de conferência de comportamento visual e interação real no editor. Esse roteiro é recomendado antes de demonstrações e entregas.
