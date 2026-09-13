@@ -39,7 +39,7 @@ func _draw() -> void:
 func _build_world() -> void:
     hud = HUDScene.instantiate()
     add_child(hud)
-    hud.configure("Fase 3 - Minhoca das Escolhas", "Setas ou WASD movimentam | Encoste ou clique na fruta correta | 1, 2 e 3 selecionam")
+    hud.configure("Fase 3 - Minhoca das Escolhas", "Setas ou WASD movimentam | mova o mouse para andar | Encoste ou clique na fruta correta | 1, 2 e 3 selecionam")
     hud.menu_requested.connect(_on_menu_requested)
 
     player = WormPlayer.new()

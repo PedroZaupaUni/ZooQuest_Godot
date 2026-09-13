@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Silhueta da copa (uniao das 3 bolhas), usada pra "cortar" o sombreado
+         escuro sem vazar pra fora do contorno -->
+    <clipPath id="copaClip">
+      <circle cx="300" cy="185" r="122"/>
+      <circle cx="175" cy="235" r="87"/>
+      <circle cx="98" cy="265" r="47"/>
+    </clipPath>
+    <clipPath id="troncoClip">
+      <path d="M 226 466
+               C 224 402 224 320 232 258
+               C 236 230 244 212 258 200
+               C 272 212 280 230 284 258
+               C 292 320 292 402 290 466 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- ===================== TRONCO ===================== -->
+  <!-- contorno preto (mesma silhueta, levemente maior) -->
+  <path d="M 216 470
+           C 214 402 214 316 223 251
+           C 227 220 237 199 258 185
+           C 279 199 289 220 293 251
+           C 302 316 302 402 300 470 Z"
+        fill="#0c0c0c"/>
+  <!-- corpo marrom -->
+  <path d="M 226 466
+           C 224 402 224 320 232 258
+           C 236 230 244 212 258 200
+           C 272 212 280 230 284 258
+           C 292 320 292 402 290 466 Z"
+        fill="#a5673f"/>
+  <!-- sombreado mais escuro do lado direito -->
+  <path d="M 258 195 L 330 195 L 330 470 L 268 470 Z" fill="#7c4a29" clip-path="url(#troncoClip)"/>
+  <!-- veios / textura -->
+  <g stroke="#0c0c0c" stroke-width="9" stroke-linecap="round" fill="none" clip-path="url(#troncoClip)">
+    <path d="M 246 420 L 246 320"/>
+    <path d="M 250 260 L 252 232"/>
+  </g>
+  <!-- nozinho (oco) -->
+  <ellipse cx="248" cy="345" rx="15" ry="23" fill="#f7f7f2" stroke="#0c0c0c" stroke-width="10"/>
+
+  <!-- ===================== COPA ===================== -->
+  <!-- contorno preto: mesmas 3 bolhas, raio maior -->
+  <g fill="#0c0c0c">
+    <circle cx="300" cy="185" r="132"/>
+    <circle cx="175" cy="235" r="97"/>
+    <circle cx="98" cy="265" r="57"/>
+  </g>
+  <!-- preenchimento verde claro por cima, escondendo o contorno interno -->
+  <g fill="#82d854">
+    <circle cx="300" cy="185" r="122"/>
+    <circle cx="175" cy="235" r="87"/>
+    <circle cx="98" cy="265" r="47"/>
+  </g>
+  <!-- sombreado verde escuro, recortado pra nao vazar da silhueta -->
+  <path d="M 296 45
+           C 260 70 246 120 268 165
+           C 284 198 262 230 278 268
+           C 288 292 274 310 282 335
+           L 460 335 L 460 45 Z"
+        fill="#57ad2c" clip-path="url(#copaClip)"/>
+
+  <!-- pintinhas (textura de folhagem) -->
+  <g fill="#0c0c0c">
+    <circle cx="245" cy="95" r="9"/>
+    <circle cx="271" cy="130" r="7"/>
+    <circle cx="360" cy="205" r="8"/>
+    <circle cx="118" cy="235" r="8"/>
+  </g>
+</svg>
