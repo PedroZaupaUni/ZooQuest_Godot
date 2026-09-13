@@ -13,10 +13,12 @@ Funcionalidades disponíveis:
 - Sapo Matemático com seleção e salto para vitórias-régias;
 - Pássaro Lógico com escolha entre faixas e interação por mouse;
 - Minhoca das Escolhas com movimento livre, colisão e seleção por mouse;
+- alternativas embaralhadas no início de cada fase, mantendo a associação correta da resposta;
 - feedback imediato de acerto e erro;
 - explicação após tentativa incorreta;
 - pontuação global e contagem de resultados;
-- encerramento, jogar novamente e retorno ao menu.
+- encerramento, jogar novamente e retorno ao menu;
+- identidade visual do menu com ícones próprios dos personagens e elemento gráfico de árvore.
 
 ## Dados e infraestrutura
 
@@ -33,9 +35,13 @@ A CI cobre `develop`, `main` e Pull Requests destinados a essas branches. Os che
 - `repository-audit`;
 - `godot-tests`.
 
-Os testes Godot verificam importação de recursos, carregamento das cenas, fluxo completo da jornada, reinício, retorno ao menu e encerramento sem erros ou vazamentos reportados pelo motor.
+Os testes Godot verificam importação de recursos, carregamento das cenas, fluxo completo da jornada, reinício, retorno ao menu, embaralhamento seguro das alternativas e encerramento sem erros ou vazamentos reportados pelo motor.
 
 O roteiro manual em `tests/manual/ROTEIRO_TESTE_FUNCIONAL.md` complementa a automação e deve ser usado antes de apresentações ou entregas acadêmicas.
+
+## Baseline atual
+
+Após a integração da última feature pendente, a versão corrente é considerada a baseline de encerramento da entrega atual. Novas mudanças futuras devem voltar a seguir o fluxo normal de branches de trabalho para `develop` e, posteriormente, release para `main`.
 
 ## Limites atuais
 

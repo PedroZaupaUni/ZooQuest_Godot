@@ -101,4 +101,12 @@ run_scene_test \
   20 \
   "main"
 
+run_scene_test \
+  "GODOT QUESTION SHUFFLE" \
+  "res://tests/question_shuffle_test.tscn" \
+  "ZOOQUEST_QUESTION_SHUFFLE_TEST=PASS" \
+  "ZOOQUEST_QUESTION_SHUFFLE_TEARDOWN=PASS" \
+  20 \
+  "shuffle"
+
 echo "ZOOQUEST_LOCAL_GODOT_TESTS=PASS"
